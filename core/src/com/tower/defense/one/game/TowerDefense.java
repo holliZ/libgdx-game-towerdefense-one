@@ -3,7 +3,7 @@ package com.tower.defense.one.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.tower.defense.one.game.demo.MainMenuScreen;
+import com.tower.defense.one.game.screen.GameScreen;
 
 public class TowerDefense extends Game {
 	
@@ -11,7 +11,7 @@ public class TowerDefense extends Game {
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Assets.load();
-		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new GameScreen(this));
 	}
 
 	@Override

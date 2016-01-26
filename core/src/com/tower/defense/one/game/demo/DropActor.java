@@ -35,7 +35,7 @@ public class DropActor extends Actor{
 			Actor bucket = this.getParent().findActor(MyStage.BUCKET);
 			if(hit(Math.abs(bucket.getX() - getX()), Math.abs(getY() - bucket.getY()), false) != null){
 				Assets.dropSound.play();
-				BackgroundActor background = (BackgroundActor)this.getParent().findActor(MyStage.BACKGROUND);
+				BackgroundActor background = this.getParent().findActor(MyStage.BACKGROUND);
 				background.addDropsGathered();
 				remove();
 			}
