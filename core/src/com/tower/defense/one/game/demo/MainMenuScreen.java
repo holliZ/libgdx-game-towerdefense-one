@@ -1,20 +1,28 @@
-package com.tower.defense.one.game;
+package com.tower.defense.one.game.demo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tower.defense.one.game.Const;
+import com.tower.defense.one.game.TowerDefense;
 
 public class MainMenuScreen implements Screen {
 	
 	final TowerDefense game;
-	
 	private OrthographicCamera camera;
+	private SpriteBatch batch;
+	private BitmapFont font;
 	
-	public MainMenuScreen(final TowerDefense gam) {
-		game = gam;
+	public MainMenuScreen(final TowerDefense game) {
+		this.game = game;
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Const.WIDTH, Const.HEIGHT);
+		
+		batch = new SpriteBatch();
+		font = new BitmapFont();
 	}
 
 	@Override
@@ -24,12 +32,12 @@ public class MainMenuScreen implements Screen {
 		
 		camera.update();
 		
-		game.batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
 		
-		game.batch.begin();
-		game.font.draw(game.batch, "Welcome to Drop!", 100, 150);
-		game.font.draw(game.batch, "Tap anywhere to begin!" , 100, 100);
-		game.batch.end();
+		batch.begin();
+		font.draw(batch, "Welcome to Drop!", 100, 150);
+		font.draw(batch, "Tap anywhere to begin!" , 100, 100);
+		batch.end();
 		
 		if(Gdx.input.isTouched()){
 			game.setScreen(new GameScreen(game));
@@ -69,7 +77,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		batch.dispose();
+		font.dispose();
 	}
 }

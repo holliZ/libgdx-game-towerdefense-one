@@ -1,9 +1,11 @@
-package com.tower.defense.one.game;
+package com.tower.defense.one.game.demo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.tower.defense.one.game.Assets;
+import com.tower.defense.one.game.Const;
 
 public class DropActor extends Actor{
 

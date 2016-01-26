@@ -1,8 +1,9 @@
-package com.tower.defense.one.game;
+package com.tower.defense.one.game.demo;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.tower.defense.one.game.Const;
 
 public class BackgroundActor extends Actor {
 

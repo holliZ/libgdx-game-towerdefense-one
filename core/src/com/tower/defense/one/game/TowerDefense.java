@@ -3,17 +3,12 @@ package com.tower.defense.one.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tower.defense.one.game.demo.MainMenuScreen;
 
 public class TowerDefense extends Game {
-	SpriteBatch batch;
-	BitmapFont font;
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		font = new BitmapFont();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Assets.load();
 		this.setScreen(new MainMenuScreen(this));
@@ -46,8 +41,6 @@ public class TowerDefense extends Game {
 	    default:
 	    	Gdx.app.debug("TowerDefense", "other platform");
 	}
-		batch.dispose();
-		font.dispose();
 		Assets.dispose();
 	}
 	

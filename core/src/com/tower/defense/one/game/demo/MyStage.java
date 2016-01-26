@@ -1,7 +1,8 @@
-package com.tower.defense.one.game;
+package com.tower.defense.one.game.demo;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.tower.defense.one.game.Const;
 
 public class MyStage extends Table {
 	
