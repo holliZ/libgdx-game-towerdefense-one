@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Rectangle;
 
 public class MainMenuScreen implements Screen {
 	
@@ -15,7 +14,7 @@ public class MainMenuScreen implements Screen {
 	public MainMenuScreen(final TowerDefense gam) {
 		game = gam;
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		camera.setToOrtho(false, Const.WIDTH, Const.HEIGHT);
 	}
 
 	@Override

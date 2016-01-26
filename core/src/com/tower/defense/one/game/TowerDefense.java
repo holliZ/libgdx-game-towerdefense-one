@@ -15,12 +15,13 @@ public class TowerDefense extends Game {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Assets.load();
 		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
 	public void render () {
-		Gdx.app.debug("MyTag", "render game");
+//		Gdx.app.debug("TowerDefense", "render game");
 		super.render();
 	}
 
@@ -28,25 +29,26 @@ public class TowerDefense extends Game {
 	public void dispose() {
 		long javaHeap = Gdx.app.getJavaHeap();
 		long nativeHeap = Gdx.app.getNativeHeap();
-		System.out.println("javaHeap:" + javaHeap);
-		System.out.println("nativeHeap:" + nativeHeap);
+		Gdx.app.debug("TowerDefense", "javaHeap:" + javaHeap);
+		Gdx.app.debug("TowerDefense", "nativeHeap:" + nativeHeap);
 		switch (Gdx.app.getType()) {
 	    case Android:
-	    	System.out.println("android platform");
+	    	Gdx.app.debug("TowerDefense", "android platform");
 	    	int androidVersion = Gdx.app.getVersion();
-	    	System.out.println("android version:" + androidVersion);
+	    	Gdx.app.debug("TowerDefense", "android version:" + androidVersion);
 	        break;
 	    case Desktop:
-	    	System.out.println("desktop platform");
+	    	Gdx.app.debug("TowerDefense", "desktop platform");
 	        break;
 	    case WebGL:
-	    	System.out.println("web platform");
+	    	Gdx.app.debug("TowerDefense", "web platform");
 	        break;
 	    default:
-	    	System.out.println("other platform");
+	    	Gdx.app.debug("TowerDefense", "other platform");
 	}
 		batch.dispose();
 		font.dispose();
+		Assets.dispose();
 	}
 	
 }
