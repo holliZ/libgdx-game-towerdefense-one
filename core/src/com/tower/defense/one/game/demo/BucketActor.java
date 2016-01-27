@@ -48,7 +48,7 @@ public class BucketActor extends Actor{
 			setX(touchPos.x - Const.OBJ_UNIT/2);
 		}
 		
-//		//Ëæ×ÅÊó±êÒÆ¶¯
+//		//å›¾ç‰‡éšé¼ æ ‡ç§»åŠ¨
 ////	Vector3 touchPos = new Vector3();
 ////	touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 ////	camera.unproject(touchPos);

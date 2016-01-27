@@ -1,48 +1,43 @@
 package com.tower.defense.one.game.actor.enemy;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.tower.defense.one.game.Assets;
 import com.tower.defense.one.game.Const;
 import com.tower.defense.one.game.map.EnemyRoute;
 import com.tower.defense.one.game.map.Point;
 
-public class Enemy1 extends Actor {
+public class Enemy extends Actor {
 
+	float HP = 100;
+	float ATK = 20;
+	float ARMOR = 0;//物理防御力
+	float MAGICDEFENSE = 0; //魔法防御力
+	float REWARD = 1;
+	float HURT = 1;
+	
 	private int step = 0;
 	private EnemyRoute route;
-	private float HP = 100;
-	private float ATK = 20;
 	private BitmapFont font;
 	private float stateTime;
+	private Animation animation;
 
-	public Enemy1(float x, float y, EnemyRoute route) {
+	public Enemy(float x, float y, EnemyRoute route, Animation animation) {
 		setBounds(x, y, Const.ENEMY_WIDTH, Const.ENEMY_HEIGHT);
 		this.route = route;
+		this.animation = animation;
 		font = new BitmapFont();
 		stateTime = 0f;
 	}
-
+	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		batch.draw(Assets.bob.getKeyFrame(stateTime, true), getX(), getY());
+		batch.draw(animation.getKeyFrame(stateTime, true), getX(), getY());
 		font.draw(batch, Float.toString(HP), getX(), getY() + getHeight());
 		font.draw(batch, getName(), getX(), getY());
-		
-//		batch.end();
-//		
-//		ShapeRenderer shapeRenderer = new ShapeRenderer();
-//		shapeRenderer.begin(ShapeType.Filled);
-//		
-//		shapeRenderer.setColor(1, 0, 0, 1);
-//		shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
-//		
-//		shapeRenderer.end();
-//		
-//		batch.begin();
 	}
 
 	@Override
@@ -51,7 +46,7 @@ public class Enemy1 extends Actor {
 		
 		stateTime += delta;
 
-		if(HP>0) {
+		if(HP > 0) {
 			nextStep();
 		} else {
 			remove();
