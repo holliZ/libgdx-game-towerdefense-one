@@ -1,15 +1,14 @@
 package com.tower.defense.one.game.actor.enemy;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tower.defense.one.game.Const;
+import com.tower.defense.one.game.actor.MyActor;
 import com.tower.defense.one.game.map.EnemyRoute;
 import com.tower.defense.one.game.map.Point;
 
-public class Enemy extends Actor {
+public class Enemy extends MyActor {
 
 	float HP = 100;
 	float ATK = 20;
@@ -50,7 +49,6 @@ public class Enemy extends Actor {
 			nextStep();
 		} else {
 			remove();
-			Gdx.app.debug("Enemy1", "Killed");
 		}
 	}
 	
@@ -62,7 +60,6 @@ public class Enemy extends Actor {
 
 		if (route.isLastStep(step)) {
 			remove();
-			Gdx.app.debug("Enemy1", "Eat");
 		}
 	}
 	

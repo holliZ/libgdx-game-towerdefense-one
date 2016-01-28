@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.tower.defense.one.game.Const;
 import com.tower.defense.one.game.TowerDefense;
 import com.tower.defense.one.game.chapters.ChapterOne;
 
@@ -15,7 +17,8 @@ public class GameScreen implements Screen {
 	
 	public GameScreen(final TowerDefense game) {
 		this.game = game;
-		stage = new Stage();
+		stage = new Stage(new FitViewport(Const.WIDTH, Const.HEIGHT));
+//		stage.getCamera().rotate(stage.getCamera().direction, -10);
 		showChapter(new ChapterOne());
 	}
 
@@ -26,7 +29,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+		Gdx.gl.glClearColor(158f/255, 172f/255, 66f/255, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(delta);
 		stage.draw();
@@ -55,6 +58,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
+		Gdx.app.debug("GameScreen", "dispose");
 	}
 	
 	public void showChapter(Actor actor){

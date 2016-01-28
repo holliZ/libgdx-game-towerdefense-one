@@ -1,0 +1,8 @@
+<TextureAtlas imagePath="sprites.png">
+	<SubTexture name="apprentice.png" x="0" y="0" width="63" height="39"/>
+	<SubTexture name="cannon.png" x="0" y="84" width="62" height="39"/>
+	<SubTexture name="crossbow.png" x="64" y="41" width="61" height="41"/>
+	<SubTexture name="crypt.png" x="64" y="84" width="61" height="37"/>
+	<SubTexture name="locking.png" x="65" y="0" width="39" height="37"/>
+	<SubTexture name="poison.png" x="0" y="41" width="62" height="41"/>
+</TextureAtlas>
