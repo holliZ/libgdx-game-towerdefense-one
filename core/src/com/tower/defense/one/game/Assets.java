@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Assets {
 	public static Texture dropImage;
@@ -27,7 +28,9 @@ public class Assets {
 	public static TextureRegion lockingIcon;
 
 	public static BitmapFont font;
-
+	public static BitmapFont font2;
+	public static ShapeRenderer shapeRenderer ;
+	
 	public static void load() {
 		dropImage = loadTexture("2.jpg");
 		bucketImage = loadTexture("1.jpg");
@@ -54,6 +57,9 @@ public class Assets {
 
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"),
 				Gdx.files.internal("data/font.png"), false);
+		font2 = new BitmapFont();
+		
+		shapeRenderer = new ShapeRenderer();
 	}
 
 	public static void dispose() {
@@ -64,6 +70,10 @@ public class Assets {
 
 		items.dispose();
 		items2.dispose();
+		
+		font.dispose();
+		font2.dispose();
+		shapeRenderer.dispose();
 	}
 
 	public static Texture loadTexture(String file) {
@@ -76,6 +86,5 @@ public class Assets {
 
 	public static Music loadMusic(String file) {
 		return Gdx.audio.newMusic(Gdx.files.internal(file));
-
 	}
 }

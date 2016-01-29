@@ -11,7 +11,6 @@ public class TowerDefense extends Game {
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Assets.load();
-		StaticVariable.load();
 		this.setScreen(new GameScreen(this));
 	}
 
@@ -43,7 +42,6 @@ public class TowerDefense extends Game {
 	    	Gdx.app.debug("TowerDefense", "other platform");
 	}
 		Assets.dispose();
-		StaticVariable.dispose();
 	}
 	
 }

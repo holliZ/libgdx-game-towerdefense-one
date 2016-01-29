@@ -12,20 +12,25 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.one.game.Const;
-import com.tower.defense.one.game.StaticVariable;
-import com.tower.defense.one.game.actor.MyActor;
+import com.tower.defense.one.game.actor.BasicActor;
 import com.tower.defense.one.game.actor.enemy.Enemy;
 import com.tower.defense.one.game.map.Point;
+import com.tower.defense.one.game.actor.bg.BGActor;
+import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 
-public class Tower extends MyActor {
+import static com.tower.defense.one.game.Assets.shapeRenderer;
+import static com.tower.defense.one.game.screen.GameScreen.lastTouchActorName;
+
+public class Tower extends BasicActor {
 
 	float ATK = 20;// 攻击力
 	int ATKNum = 1;// 最多可以同时攻击多少个敌人;为0时指范围攻击
-	int ATKSpeed = 1;// 攻击速度
+	int ATKSpeed = 1;// 攻击速度, 数值越大越慢
 	Array<Point> enemyPoints = new Array<Point>(0);//同時攻擊的敵人
 	float offsetX, offsetY;
 	Color towerColor;
 	Color ATKColor;
+	static int COST = 100;
 	static Color ATKBoundColor = new Color(219f/255, 163f/255, 27f/255, 0.5f);
 
 	private int ATKCount = 0;// 本次已经攻击的敌人数目
@@ -35,9 +40,9 @@ public class Tower extends MyActor {
 	private boolean showAction = false;
 
 	public Tower(float x, float y) {//传入中心位置
+		super(x - Const.TOWER_WIDTH/2, y - Const.TOWER_HEIGHT/2, Const.TOWER_WIDTH, Const.TOWER_HEIGHT);
 		offsetX = x;
 		offsetY = y;
-		setBounds(x - Const.TOWER_WIDTH/2, y - Const.TOWER_HEIGHT/2, Const.TOWER_WIDTH, Const.TOWER_HEIGHT);
 		ATKEllipse = new Ellipse(x, y, 0, 0);//椭圆为了判定hit需要传入的是中心位置已经宽高，但是绘制的时候需要传入的是顶点位置，这一点需要注意
 		boundEllipse = new Ellipse(x , y, Const.TOWER_WIDTH, Const.TOWER_HEIGHT);
 		towerColor = new Color(219f/255, 163f/255, 27f/255, 0.5f);
@@ -47,25 +52,26 @@ public class Tower extends MyActor {
 	public void initTower() {
 		Array<Point> points = generateTowerOptionPosition(offsetX, offsetY);
 		
-		newTowerOption(points.get(0).getX(), points.get(0).getY(), TowerOption.CANNON, getName());
-		newTowerOption(points.get(1).getX(), points.get(1).getY(), TowerOption.CRYPT, getName());
-		newTowerOption(points.get(2).getX(), points.get(2).getY(), TowerOption.CROSSBOW, getName());
-		newTowerOption(points.get(3).getX(), points.get(3).getY(), TowerOption.APPRENTICE, getName());
-		newTowerOption(points.get(4).getX(), points.get(4).getY(), TowerOption.POISON, getName());
+		newTowerOption(points.get(0).getX(), points.get(0).getY(), TowerOption.CANNON, getName(), false);
+		newTowerOption(points.get(1).getX(), points.get(1).getY(), TowerOption.CRYPT, getName(), true);
+		newTowerOption(points.get(2).getX(), points.get(2).getY(), TowerOption.CROSSBOW, getName(), true);
+		newTowerOption(points.get(3).getX(), points.get(3).getY(), TowerOption.APPRENTICE, getName(), true);
+		newTowerOption(points.get(4).getX(), points.get(4).getY(), TowerOption.POISON, getName(), true);
 	}
 	
 	private Array<Point> generateTowerOptionPosition(float x, float y){
+		float distance = 70f;
 		Array<Point> points = new Array<Point>();
-		points.add(new Point(x, y + 100));
-		points.add(new Point(x - MathUtils.sinDeg(72) * 100, y + MathUtils.cosDeg(72) * 100));
-		points.add(new Point(x - MathUtils.sinDeg(36) * 100, y - MathUtils.cosDeg(36) * 100));
-		points.add(new Point(x + MathUtils.sinDeg(72) * 100, y + MathUtils.cosDeg(72) * 100));
-		points.add(new Point(x + MathUtils.sinDeg(36) * 100, y - MathUtils.cosDeg(36) * 100));
+		points.add(new Point(x, y + distance));
+		points.add(new Point(x - MathUtils.sinDeg(72) * distance, y + MathUtils.cosDeg(72) * distance));
+		points.add(new Point(x - MathUtils.sinDeg(36) * distance, y - MathUtils.cosDeg(36) * distance));
+		points.add(new Point(x + MathUtils.sinDeg(72) * distance, y + MathUtils.cosDeg(72) * distance));
+		points.add(new Point(x + MathUtils.sinDeg(36) * distance, y - MathUtils.cosDeg(36) * distance));
 		return points;
 	}
 	
-	private void newTowerOption(float x, float y, int type, String towerName){
-		TowerOption TowerOption= new TowerOption(x, y , type);
+	private void newTowerOption(float x, float y, int type, String towerName, boolean locked){
+		TowerOption TowerOption= new TowerOption(x, y , type, locked);
 		TowerOption.setName(towerName + "_" + type);
 		TowerOption.setVisible(false);
 		getParent().addActorAfter(this, TowerOption);
@@ -80,25 +86,25 @@ public class Tower extends MyActor {
 		super.draw(batch, parentAlpha);
 		batch.end();
 
-		StaticVariable.shapeRenderer.begin(ShapeType.Filled);
-		StaticVariable.shapeRenderer.setColor(towerColor.r, towerColor.g, towerColor.b, towerColor.a);
-		StaticVariable.shapeRenderer.ellipse(boundEllipse.x - boundEllipse.width / 2,
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(towerColor.r, towerColor.g, towerColor.b, towerColor.a);
+		shapeRenderer.ellipse(boundEllipse.x - boundEllipse.width / 2,
 				boundEllipse.y - boundEllipse.height / 2, boundEllipse.width,
 				boundEllipse.height);
-		StaticVariable.shapeRenderer.end();
+		shapeRenderer.end();
 
-		StaticVariable.shapeRenderer.begin(ShapeType.Line);
-		StaticVariable.shapeRenderer.setColor(ATKBoundColor.r, ATKBoundColor.g, ATKBoundColor.b, ATKBoundColor.a);
-		StaticVariable.shapeRenderer.ellipse(ATKEllipse.x - ATKEllipse.width / 2, ATKEllipse.y
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(ATKBoundColor.r, ATKBoundColor.g, ATKBoundColor.b, ATKBoundColor.a);
+		shapeRenderer.ellipse(ATKEllipse.x - ATKEllipse.width / 2, ATKEllipse.y
 				- ATKEllipse.height / 2, ATKEllipse.width, ATKEllipse.height);
-		StaticVariable.shapeRenderer.setColor(ATKColor.r, ATKColor.g, ATKColor.b, ATKColor.a);
+		shapeRenderer.setColor(ATKColor.r, ATKColor.g, ATKColor.b, ATKColor.a);
 		Iterator<Point> it = enemyPoints.iterator();
 		while (it.hasNext()) {
 			Point point = it.next();
-			StaticVariable.shapeRenderer.line(ATKEllipse.x, ATKEllipse.y, point.getX(),
+			shapeRenderer.line(ATKEllipse.x, ATKEllipse.y, point.getX(),
 					point.getY());
 		}
-		StaticVariable.shapeRenderer.end();
+		shapeRenderer.end();
 
 		batch.begin();
 	}
@@ -108,7 +114,7 @@ public class Tower extends MyActor {
 		super.act(delta);
 		enemyPoints.clear();
 		if (canATK()) {
-			for (int i = 0; i < StaticVariable.enemyNum; i++) {
+			for (int i = 0; i < BGActor.enemyIndex; i++) {
 				Enemy enemy = getParent().findActor(Const.ENEMY_ACTOR + i);
 				if (enemy != null && hitEnemy(enemy)) {
 					ATKCount++;
@@ -140,7 +146,7 @@ public class Tower extends MyActor {
 	}
 
 	private boolean canATK() {
-		return TimeUtils.nanoTime() - lastATKTime > Const.ONE_SECOND * ATKSpeed;
+		return TimeUtils.nanoTime() - lastATKTime > Const.ONE_SECOND/ PlaySpeedButton.getSpeed() * ATKSpeed;
 	}
 
 	@Override
@@ -157,8 +163,8 @@ public class Tower extends MyActor {
 	}
 	
 	public void onClick(){
-		Gdx.app.debug("Tower", "OnClick");
-		if(StaticVariable.lastTouchActorName != getName() && !StaticVariable.lastTouchActorName.startsWith(getName())) {
+		Gdx.app.debug("Tower", "OnClick  lastTouchActorName =" + lastTouchActorName + " getName()=" + getName());
+		if(lastTouchActorName != null && lastTouchActorName != getName() && !lastTouchActorName.startsWith(getName())) {
 			super.onClick();
 		}
 		showOrHideOption();
@@ -174,11 +180,14 @@ public class Tower extends MyActor {
 	}
 	
 	private void showOrHideOption(int type) {
-		TowerOption towerTtpe = getParent().findActor(getName() + "_" + type);
-		if(towerTtpe != null) {
-			towerTtpe.setVisible(showAction);
+		TowerOption towerType = getParent().findActor(getName() + "_" + type);
+		if(towerType != null) {
+			towerType.setVisible(showAction);
 		}
 	}
-	
+
+	public static int getCOST() {
+		return COST;
+	}
 	
 }

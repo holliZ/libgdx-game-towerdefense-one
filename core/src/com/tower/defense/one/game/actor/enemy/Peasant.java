@@ -9,9 +9,9 @@ public class Peasant extends Enemy{
 	private int ATKMax = 15;
 	private int ATKMin = 5;
 
-	public Peasant(float x, float y, EnemyRoute route){
-		super(x,y,route, Assets.bob);
-		HP = 135;
+	public Peasant(EnemyRoute route){
+		super(route, Assets.bob);
+		HPMax = HP = 135;
 		ATK = MathUtils.random(ATKMin, ATKMax);
 		REWARD = 4;
 	}
