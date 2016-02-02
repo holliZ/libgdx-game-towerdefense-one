@@ -114,4 +114,13 @@ public class Utils {
 		shapeRenderer.translate(-centerX, -centerY, 0);
 	}
 	
+	public static void DrawRightNowButton(Batch batch, float offsetX, float offsetY, float radius, float angel) {
+		batch.end();
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(1, 0, 0, 1);
+		shapeRenderer.arc(offsetX, offsetY, radius, 90, angel);
+		shapeRenderer.end();
+		batch.begin();
+	}
+	
 }
