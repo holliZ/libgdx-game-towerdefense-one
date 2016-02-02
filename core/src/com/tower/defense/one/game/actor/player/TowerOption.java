@@ -16,9 +16,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Ellipse;
-import com.tower.defense.one.game.Utils;
 import com.tower.defense.one.game.actor.BasicActor;
-import com.tower.defense.one.game.actor.bg.BGActor;
+import com.tower.defense.one.game.actor.bg.BGPanel;
 
 public class TowerOption extends BasicActor {
 
@@ -76,14 +75,15 @@ public class TowerOption extends BasicActor {
 
 		batch.end();
 
-		if (COST <= BGActor.TreasureCur) {
-
+		
+		if (COST <= BGPanel.TreasureCur) {
+//			shapeRenderer.setColor(225/255f, 94/255f, 39/255f, 0.8f);
+		} else {
 			Gdx.gl.glEnable(GL20.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			shapeRenderer.begin(ShapeType.Filled);
-			shapeRenderer.setColor(191f / 255, 191f / 255, 191f / 255, 0.8f);
-			Utils.DrawFilledRoundRect(getX(), getY(), getWidth(), getHeight(),
-					20, shapeRenderer);
+			shapeRenderer.setColor(112/255f, 112/255f, 112/255f, 0.8f);
+			shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL20.GL_BLEND);
 		}
@@ -132,14 +132,14 @@ public class TowerOption extends BasicActor {
 				}
 			}
 
-		} else if (COST <= BGActor.TreasureCur) {
+		} else if (COST <= BGPanel.TreasureCur) {
 			tempATKEllipse.set(0, 0, 0, 0);
 			Tower tower = getParent().findActor(getName().split("_")[0]);
 			if (tower != null) {
 				switch (type) {
 				case CANNON:
 					Tower newTower = new OrcCannon(tower.offsetX, tower.offsetY);
-					BGActor.addTreasure(-COST);
+					BGPanel.addTreasure(-COST);
 					newTower.setName(tower.getName());
 					getParent().addActorAfter(tower, newTower);
 					break;

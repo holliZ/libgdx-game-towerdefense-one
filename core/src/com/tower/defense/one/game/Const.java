@@ -15,10 +15,6 @@ public class Const {
 	public static final int TOWER_TYPE_WIDTH = 64;
 	public static final int TOWER_TYPE_HEIGHT = 64;
 	
-	public static final int PAUSE_WIDTH = 32;
-	public static final int PAUSE_HEIGHT = 32;
-	
-	public static final String BG_ACTOR = "BGActor" ;
 	public static final String ENEMY_ACTOR = "EnemyActor" ;
 	public static final String TOWER_ACTOR = "TowerActor" ;
 	

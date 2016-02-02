@@ -7,11 +7,11 @@ import com.tower.defense.one.game.Utils;
 import com.tower.defense.one.game.actor.BasicActor;
 import com.tower.defense.one.game.screen.GameScreen;
 
-public class PauseActor extends BasicActor {
+public class PauseButton extends BasicActor {
 	
 	final GameScreen gameScreen;
-	public PauseActor(final GameScreen gameScreen) {
-		super(WIDTH - PAUSE_WIDTH - 10, HEIGHT - PAUSE_HEIGHT - 8, PAUSE_WIDTH, PAUSE_HEIGHT, false);
+	public PauseButton(final GameScreen gameScreen) {
+		super(WIDTH - 50, HEIGHT - 40, 45, 36, false);
 		this.gameScreen = gameScreen;
 	}
 
@@ -24,10 +24,8 @@ public class PauseActor extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		batch.end();
 		if(gameScreen.getGameState() == GAME_RUNNING) {
-			Utils.DrawPauseButton(getX(), getY(), getWidth(), getHeight(), 10);
+			Utils.DrawButtonByFont(batch, "II", getX(), getY(), getWidth(), getHeight());
 		}
-		batch.begin();
 	}
 }

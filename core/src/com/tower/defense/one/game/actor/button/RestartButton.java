@@ -1,16 +1,15 @@
 package com.tower.defense.one.game.actor.button;
 
-import static com.tower.defense.one.game.Const.GAME_RUNNING;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.tower.defense.one.game.Utils;
 import com.tower.defense.one.game.actor.BasicActor;
 import com.tower.defense.one.game.screen.GameScreen;
 
-public class ResumeActor extends BasicActor {
+public class RestartButton extends BasicActor {
 
 	final GameScreen gameScreen;
-	public ResumeActor(final GameScreen gameScreen, float offsetX, float offsetY) {
+	
+	public RestartButton(final GameScreen gameScreen, float offsetX, float offsetY){
 		super(offsetX - 150 /2, offsetY - 35/2, 150, 35, false);
 		this.gameScreen = gameScreen;
 	}
@@ -18,12 +17,12 @@ public class ResumeActor extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		Utils.DrawButtonByFont(batch, "Resume", getX(), getY(), getWidth(), getHeight());
+		Utils.DrawButtonByFont(batch, "Restart", getX(), getY(), getWidth(), getHeight());
 	}
 	
 	@Override
 	public void onClick() {
 		super.onClick();
-		gameScreen.setGameState(GAME_RUNNING);
+		gameScreen.startGame();
 	}
 }

@@ -57,7 +57,8 @@ public class Assets {
 
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"),
 				Gdx.files.internal("data/font.png"), false);
-		font2 = new BitmapFont();
+		font2 = new BitmapFont(Gdx.files.internal("data/font2.fnt"),
+				Gdx.files.internal("data/font2.png"), false);
 		
 		shapeRenderer = new ShapeRenderer();
 	}

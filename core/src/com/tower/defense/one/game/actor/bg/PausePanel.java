@@ -27,7 +27,7 @@ public class PausePanel extends Table{
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(141f / 255, 141f / 255, 141f / 255, 120f / 255);
+		shapeRenderer.setColor(141/255f, 141/255f, 141/255f, 120/255f);
 		shapeRenderer.rect(0, 0, WIDTH, HEIGHT);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);

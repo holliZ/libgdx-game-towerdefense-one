@@ -3,17 +3,17 @@ package com.tower.defense.one.game.map;
 import com.badlogic.gdx.utils.Array;
 
 
-public class EnemyRoute {
+public class Route {
 
 	Array<Point> points;
 	int size;
 	
-	public EnemyRoute(){
+	public Route(){
 		points = new Array<Point>();
 		size = 0;
 	}
 	
-	public EnemyRoute(Point[] points){
+	public Route(Point[] points){
 		this.points = new Array<Point>();
 		for(Point point: points) {
 			this.points.add(point);
@@ -21,7 +21,7 @@ public class EnemyRoute {
 		this.size = points.length;
 	}
 	
-	public EnemyRoute(float[][] points){//new EnemyRoute(new float[][]{{1,2},{2,3},{3,4}});
+	public Route(float[][] points){//new EnemyRoute(new float[][]{{1,2},{2,3},{3,4}});
 		this.points = new Array<Point>();
 		for(int i = 0; i < points.length; i++){
 			this.points.add(new Point(points[i][0], points[i][1]));
@@ -48,7 +48,7 @@ public class EnemyRoute {
 		return step >= size;
 	}
 	
-	public void generateByCorner(float[][] cornerPoints){
+	public void generateByCorner(float[][] cornerPoints, float distancePerFrame){
 		if(cornerPoints.length > 0) {
 			Point lastCorner = new Point(cornerPoints[0][0], cornerPoints[0][1]);
 			Point curCorner;
@@ -61,7 +61,7 @@ public class EnemyRoute {
 				xDValue = curCorner.x - lastCorner.x;
 				yDValue = curCorner.y - lastCorner.y;
 				obliqueLength = (float) Math.sqrt(Math.pow(Math.abs(xDValue),2) + Math.pow(Math.abs(yDValue), 2));
-				for(float oblique = 1.0f; oblique < obliqueLength; oblique += 1.0f) {
+				for(float oblique = distancePerFrame; oblique < obliqueLength; oblique += distancePerFrame) {
 					x = xDValue * oblique/obliqueLength;
 					y = yDValue * oblique/obliqueLength;
 					addPoint(lastCorner.x + x, lastCorner.y + y);

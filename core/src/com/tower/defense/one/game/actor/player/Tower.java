@@ -15,7 +15,7 @@ import com.tower.defense.one.game.Const;
 import com.tower.defense.one.game.actor.BasicActor;
 import com.tower.defense.one.game.actor.enemy.Enemy;
 import com.tower.defense.one.game.map.Point;
-import com.tower.defense.one.game.actor.bg.BGActor;
+import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 
 import static com.tower.defense.one.game.Assets.shapeRenderer;
@@ -23,20 +23,20 @@ import static com.tower.defense.one.game.screen.GameScreen.lastTouchActorName;
 
 public class Tower extends BasicActor {
 
-	float ATK = 20;// 攻击力
+	int ATK = 20;// 攻击力
 	int ATKNum = 1;// 最多可以同时攻击多少个敌人;为0时指范围攻击
-	int ATKSpeed = 1;// 攻击速度, 数值越大越慢
+	float ATKSpeed = 1;// 攻击速度, 数值越大越慢
 	Array<Point> enemyPoints = new Array<Point>(0);//同時攻擊的敵人
 	float offsetX, offsetY;
 	Color towerColor;
 	Color ATKColor;
 	static int COST = 100;
-	static Color ATKBoundColor = new Color(219f/255, 163f/255, 27f/255, 0.5f);
+	Color ATKBoundColor = new Color(219/255f, 163/255f, 27/255f, 0.5f);
 
-	private int ATKCount = 0;// 本次已经攻击的敌人数目
+	protected int ATKCount = 0;// 本次已经攻击的敌人数目
 	private Ellipse ATKEllipse;
 	private Ellipse boundEllipse;
-	private long lastATKTime = 0;// 用来判定该塔是否可以攻击
+	protected long lastATKTime = 0;// 用来判定该塔是否可以攻击
 	private boolean showAction = false;
 
 	public Tower(float x, float y) {//传入中心位置
@@ -45,11 +45,11 @@ public class Tower extends BasicActor {
 		offsetY = y;
 		ATKEllipse = new Ellipse(x, y, 0, 0);//椭圆为了判定hit需要传入的是中心位置已经宽高，但是绘制的时候需要传入的是顶点位置，这一点需要注意
 		boundEllipse = new Ellipse(x , y, Const.TOWER_WIDTH, Const.TOWER_HEIGHT);
-		towerColor = new Color(219f/255, 163f/255, 27f/255, 0.5f);
+		towerColor = new Color(219/255f, 163/255f, 27/255f, 0.5f);
 		ATKColor = new Color(1, 0, 0, 1);
 	}
 	
-	public void initTower() {
+	public void init() {
 		Array<Point> points = generateTowerOptionPosition(offsetX, offsetY);
 		
 		newTowerOption(points.get(0).getX(), points.get(0).getY(), TowerOption.CANNON, getName(), false);
@@ -94,15 +94,21 @@ public class Tower extends BasicActor {
 		shapeRenderer.end();
 
 		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(ATKBoundColor.r, ATKBoundColor.g, ATKBoundColor.b, ATKBoundColor.a);
-		shapeRenderer.ellipse(ATKEllipse.x - ATKEllipse.width / 2, ATKEllipse.y
-				- ATKEllipse.height / 2, ATKEllipse.width, ATKEllipse.height);
-		shapeRenderer.setColor(ATKColor.r, ATKColor.g, ATKColor.b, ATKColor.a);
-		Iterator<Point> it = enemyPoints.iterator();
-		while (it.hasNext()) {
-			Point point = it.next();
-			shapeRenderer.line(ATKEllipse.x, ATKEllipse.y, point.getX(),
-					point.getY());
+		
+		if(ATKBoundColor != null) {
+			shapeRenderer.setColor(ATKBoundColor.r, ATKBoundColor.g, ATKBoundColor.b, ATKBoundColor.a);
+			shapeRenderer.ellipse(ATKEllipse.x - ATKEllipse.width / 2, ATKEllipse.y
+					- ATKEllipse.height / 2, ATKEllipse.width, ATKEllipse.height);
+		}
+		
+		if(ATKColor != null) {
+			shapeRenderer.setColor(ATKColor.r, ATKColor.g, ATKColor.b, ATKColor.a);
+			Iterator<Point> it = enemyPoints.iterator();
+			while (it.hasNext()) {
+				Point point = it.next();
+				shapeRenderer.line(ATKEllipse.x, ATKEllipse.y, point.getX(),
+						point.getY());
+			}
 		}
 		shapeRenderer.end();
 
@@ -113,11 +119,14 @@ public class Tower extends BasicActor {
 	public void act(float delta) {
 		super.act(delta);
 		enemyPoints.clear();
+		towerAct(delta);
+	}
+	
+	protected void towerAct(float delta) {
 		if (canATK()) {
-			for (int i = 0; i < BGActor.enemyIndex; i++) {
+			for (int i = 0; i < BGPanel.enemyIndex; i++) {
 				Enemy enemy = getParent().findActor(Const.ENEMY_ACTOR + i);
 				if (enemy != null && hitEnemy(enemy)) {
-					ATKCount++;
 					if (ATKNum == 0 || ATKCount < ATKNum) {
 						continue;
 					} else {
@@ -127,8 +136,8 @@ public class Tower extends BasicActor {
 			}
 		}
 	}
-
-	private boolean hitEnemy(Enemy enemy) {
+	
+	protected boolean findEnemy(Enemy enemy){
 		if (ATKEllipse.contains(enemy.getX(), enemy.getY())
 				|| ATKEllipse.contains(enemy.getX() + enemy.getWidth(),
 						enemy.getY())
@@ -138,6 +147,14 @@ public class Tower extends BasicActor {
 						enemy.getY() + enemy.getHeight())) {
 			enemyPoints.add(new Point(enemy.getX() + enemy.getWidth() / 2,
 					enemy.getY() + enemy.getHeight() / 2));
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean hitEnemy(Enemy enemy) {
+		if(findEnemy(enemy)) {
+			ATKCount++;
 			enemy.hited(ATK);
 			lastATKTime = TimeUtils.nanoTime();
 			return true;
@@ -145,7 +162,7 @@ public class Tower extends BasicActor {
 		return false;
 	}
 
-	private boolean canATK() {
+	protected boolean canATK() {
 		return TimeUtils.nanoTime() - lastATKTime > Const.ONE_SECOND/ PlaySpeedButton.getSpeed() * ATKSpeed;
 	}
 
