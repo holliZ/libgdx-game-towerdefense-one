@@ -9,6 +9,7 @@ import static com.tower.defense.one.game.Const.WIDTH;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -35,6 +36,8 @@ public class GameScreen implements Screen {
 	public static String lastTouchActorName = "";
 	
 	public GameScreen(final TowerDefense game) {
+		Box2D.init();
+		
 		this.game = game;
 		stage = new Stage(new FitViewport(WIDTH, HEIGHT));
 //		stage.getCamera().rotate(stage.getCamera().direction, -10);
@@ -56,6 +59,7 @@ public class GameScreen implements Screen {
 		
 		summaryPanel = new SummaryPanel(this);
 		stage.addActor(summaryPanel);
+		
 		
 		startGame();
 	}

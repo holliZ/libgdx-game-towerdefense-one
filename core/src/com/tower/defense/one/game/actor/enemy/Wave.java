@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.one.game.Const;
 import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
+import com.tower.defense.one.game.actor.button.RightNowButton;
 import com.tower.defense.one.game.map.Route;
 
 public class Wave {
@@ -15,6 +16,10 @@ public class Wave {
 	private long lastGenerateTime = 0;
 	private float peasantInterval = 1.0f;
 	private boolean begin;
+	private int leftTime;
+	private final int beCloseTime = 15;
+	private RightNowButton rightNowButton;
+	private boolean firstEnemy = false;
 	
 	public Wave(Route route, int delayTime){
 		this.route = route;
@@ -41,11 +46,21 @@ public class Wave {
 		if(begin) {
 			return begin;
 		} else {
+			System.out.println("leftTime:" + leftTime);
+			leftTime = (int) (delayTime - TimeUtils.timeSinceNanos(lastWaveBeginTime)/Const.ONE_SECOND );
 			if(TimeUtils.timeSinceNanos(lastWaveBeginTime) > Const.ONE_SECOND/ PlaySpeedButton.getSpeed() * delayTime){
-				begin = true;
+				righrNow();
 			}
 		}
 		return begin;
+	}
+	
+	public boolean isCreateRightNowButton(){
+		if(rightNowButton == null && leftTime <= beCloseTime) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public Enemy generate(){
@@ -68,4 +83,46 @@ public class Wave {
 		return leftEnemy > 0;
 	}
 
+	public void righrNow(){
+		begin = true;
+		firstEnemy = true;
+		if(rightNowButton != null) {
+			rightNowButton.remove();
+			rightNowButton = null;
+		}
+	}
+	
+	public float getWaveBeignX(){
+		return route.getPoint(0).getX();
+	}
+
+	public float getWaveBeignY(){
+		return route.getPoint(0).getY();
+	}
+	
+	public void setRightNowButton(RightNowButton rightNowButton) {
+		System.out.println("setRightNowButton:" + leftTime);
+		this.rightNowButton = rightNowButton;
+	}
+	
+	public RightNowButton getRightNowButton() {
+		return rightNowButton;
+	}
+
+	public boolean isFirstEnemy() {
+		return firstEnemy;
+	}
+
+	public void setFirstEnemy(boolean firstEnemy) {
+		this.firstEnemy = firstEnemy;
+	}
+
+	public int getLeftTime() {
+		return leftTime;
+	}
+
+	public int getDelayTime() {
+		return delayTime;
+	}
+	
 }

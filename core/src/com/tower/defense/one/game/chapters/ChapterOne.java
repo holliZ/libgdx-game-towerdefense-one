@@ -5,9 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.tower.defense.one.game.Assets;
 import com.tower.defense.one.game.Const;
 import com.tower.defense.one.game.Utils;
 import com.tower.defense.one.game.actor.bg.BGPanel;
+import com.tower.defense.one.game.actor.button.RightNowButton;
 import com.tower.defense.one.game.actor.enemy.Enemy;
 import com.tower.defense.one.game.actor.enemy.Wave;
 import com.tower.defense.one.game.actor.player.Tower;
@@ -25,6 +27,7 @@ public class ChapterOne extends Table {
 	final int waveMax = 10;
 	
 	private long chapterBeginTime;
+	private long lastWaveBeginTime;
 	
 	public ChapterOne(final GameScreen gameScreen){
 		setBounds(0, 0, Const.WIDTH, Const.HEIGHT);
@@ -38,7 +41,7 @@ public class ChapterOne extends Table {
 		gameScreen.setWaveIndex(curWaveIndex);
 		generateTowers();
 		generateEnemys();
-		chapterBeginTime = TimeUtils.nanoTime();
+		lastWaveBeginTime = chapterBeginTime = TimeUtils.nanoTime();
 		setTouchable(Touchable.childrenOnly);
 	}
 	
@@ -73,7 +76,11 @@ public class ChapterOne extends Table {
 		} else {
 			for(int waveIndex = lastAvailableWaveIndex; waveIndex < waveMax; waveIndex++){
 				Wave wave = waves.get(waveIndex);
-				if(wave.begin(chapterBeginTime)) {
+				if(wave.begin(lastWaveBeginTime)) {
+					if(wave.isFirstEnemy()) {
+						lastWaveBeginTime = TimeUtils.nanoTime();
+						wave.setFirstEnemy(false);
+					}
 					if(wave.isAvailableWave()) {
 						curWaveIndex = waveIndex;
 						gameScreen.setWaveIndex(curWaveIndex);
@@ -83,6 +90,13 @@ public class ChapterOne extends Table {
 						lastAvailableWaveIndex = waveIndex + 1;
 					}
 				} else {
+					if(wave.getRightNowButton() == null) {
+						if(waveIndex == 0 || wave.isCreateRightNowButton()) {
+							RightNowButton rightNowButton = new RightNowButton(wave);
+							wave.setRightNowButton(rightNowButton);
+							addActor(rightNowButton);
+						}
+					}
 					break;
 				}
 			}
@@ -103,6 +117,7 @@ public class ChapterOne extends Table {
 //		Utils.DrawRouteInLineByCorners(batch, corners);
 		Utils.DrawRouteInFilledByCorners(batch, corners);
 		super.draw(batch, parentAlpha);
+		Assets.font.draw(batch, "Time:" +TimeUtils.timeSinceNanos(chapterBeginTime)/Const.ONE_SECOND, 0, 0 + 30);
 	}
 	
 	public int getWaveMax() {
