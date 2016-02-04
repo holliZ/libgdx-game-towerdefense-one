@@ -14,7 +14,7 @@ public class RightNowButton extends BasicActor {
 	final Wave wave;
 
 	public RightNowButton(final Wave wave) {
-		super(wave.getWaveBeignX(), wave.getWaveBeignY(), 0, 0, false);
+		super(wave.getWaveBeignX(), wave.getWaveBeignY(), 0, 0, true);
 		this.wave = wave;
 		rightNowCircle = new Circle(getX() + radius, getY(), radius);
 	}
@@ -22,7 +22,9 @@ public class RightNowButton extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		Utils.DrawRightNowButton(batch, rightNowCircle.x, rightNowCircle.y, rightNowCircle.radius, 360 * (wave.getLeftTime() + 1)/Wave.beCloseTime);
+		batch.end();
+		Utils.DrawRightNowButton(rightNowCircle.x, rightNowCircle.y, rightNowCircle.radius, 360 * (wave.getLeftTime() + 1)/Wave.beCloseTime);
+		batch.begin();
 	}
 	
 	@Override

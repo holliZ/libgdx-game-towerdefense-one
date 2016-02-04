@@ -17,7 +17,6 @@ import com.tower.defense.one.game.TowerDefense;
 import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.bg.PausePanel;
 import com.tower.defense.one.game.actor.bg.SummaryPanel;
-import com.tower.defense.one.game.actor.button.PauseButton;
 import com.tower.defense.one.game.chapters.ChapterOne;
 
 public class GameScreen implements Screen {
@@ -26,12 +25,9 @@ public class GameScreen implements Screen {
 	private Stage stage;
 	SummaryPanel summaryPanel;
 	PausePanel pausePanel;
-	PauseButton pauseButton;
 	ChapterOne chapter;
 	BGPanel bgPanel;
 	int gameState;
-	
-	public static String lastTouchActorName = "";
 	
 	public GameScreen(final TowerDefense game) {
 		Box2D.init();
@@ -43,11 +39,8 @@ public class GameScreen implements Screen {
 		chapter = new ChapterOne(this);
 		stage.addActor(chapter);
 		
-		bgPanel = new BGPanel(chapter.getWaveMax());
+		bgPanel = new BGPanel(this, chapter.getWaveMax());
 		stage.addActor(bgPanel);
-		
-		pauseButton = new PauseButton(this);
-		stage.addActor(pauseButton);
 		
 		pausePanel = new PausePanel(this);
 		stage.addActor(pausePanel);
@@ -106,10 +99,12 @@ public class GameScreen implements Screen {
 		this.gameState = gameState;
 		switch(gameState){
 		case GAME_RUNNING:
+			bgPanel.setVisible(true);
 			chapter.setTouchable(Touchable.childrenOnly);
 			pausePanel.setVisible(false);
 			break;
 		case GAME_PAUSED:
+			bgPanel.setVisible(false);
 			pausePanel.setVisible(true);
 			chapter.setTouchable(Touchable.disabled);
 			break;

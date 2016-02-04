@@ -2,10 +2,17 @@ package com.tower.defense.one.game;
 
 import static com.tower.defense.one.game.Assets.font;
 import static com.tower.defense.one.game.Assets.shapeRenderer;
+import static com.tower.defense.one.game.Const.CoverColor;
+import static com.tower.defense.one.game.Const.HEIGHT;
+import static com.tower.defense.one.game.Const.WIDTH;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.Align;
 
 public class Utils {
 
@@ -21,36 +28,23 @@ public class Utils {
 		shapeRenderer.circle(x + width - radius, y + height - radius, radius);
 	}
 	
-	static void DrawPauseButton(float x, float y, float width, float height,float interval){
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(86/255f, 86/255f, 86/255f, 1);
-		DrawFilledRoundRect(x - 10 , y - 5, width + 10 * 2, height + 5 * 2, 10, shapeRenderer);
-		shapeRenderer.setColor(220/255f, 220/255f, 220/255f, 1);
-		shapeRenderer.rect(x, y, (width - interval)/2, height);
-		shapeRenderer.rect(x + (width + interval)/2, y, (width - interval)/2, height);
-		shapeRenderer.end();
-	}
+
 	
-	public static void DrawButtonByFont(Batch batch, String s, float x, float y, float width, float height, float fontOffsetX, float fontOffsetY){
+	public static void DrawButtonByFont(Batch batch, String s, float x, float y, float width, float height){
 		batch.end();
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(239/255f, 172/255f, 52/255f, 1);
+		shapeRenderer.setColor(Const.ButtonBGColor);
 		DrawFilledRoundRect(x ,y ,width, height, 10, shapeRenderer);
 		shapeRenderer.end();
 		batch.begin();
-		font.draw(batch, s, x + 10 + fontOffsetX, y + 30 + fontOffsetY);
+		font.draw(batch, s, x, y + 30, width, Align.center, false);
 	}
 	
-	public static void DrawButtonByFont(Batch batch, String s, float x, float y, float width, float height){
-		DrawButtonByFont(batch, s, x, y, width, height, 0, 0);
-	}
-	
-	public static void DrawRouteInLineByCorners(Batch batch, float[][] corners){
+	public static void DrawRouteInLineByCorners(float[][] corners){
 		int radius = 30;
 		float lastX, lastY, nextX, nextY;
-		batch.end();
 		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(251/255f, 195/255f, 136/255f, 1);
+		shapeRenderer.setColor(Const.RouteColor);
 		if(corners.length > 0) {
 			lastX = corners[0][0];
 			lastY = corners[0][1];
@@ -64,15 +58,13 @@ public class Utils {
 			}
 		}
 		shapeRenderer.end();
-		batch.begin();
 	}
 	
-	public static void DrawRouteInFilledByCorners(Batch batch, float[][] corners){
+	public static void DrawRouteInFilledByCorners(float[][] corners){
 		int radius = 30;
 		float lastX, lastY, nextX, nextY;
-		batch.end();
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(251/255f, 195/255f, 136/255f, 1);
+		shapeRenderer.setColor(Const.RouteColor);
 		shapeRenderer.identity();
 		if(corners.length > 0) {
 			lastX = corners[0][0];
@@ -87,7 +79,6 @@ public class Utils {
 			}
 		}
 		shapeRenderer.end();
-		batch.begin();
 	}
 	
 	private static void drawObliqueRect(float leftCenterX1, float leftCenterY1, float leftCenterX2, float leftCenterY2, float newHeight) {
@@ -114,13 +105,44 @@ public class Utils {
 		shapeRenderer.translate(-centerX, -centerY, 0);
 	}
 	
-	public static void DrawRightNowButton(Batch batch, float offsetX, float offsetY, float radius, float angel) {
-		batch.end();
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(1, 0, 0, 1);
-		shapeRenderer.arc(offsetX, offsetY, radius, 90, angel);
+	public static void DrawRightNowButton(float x, float y, float radius, float angel) {
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BROWN);
+		shapeRenderer.circle(x, y, radius);
 		shapeRenderer.end();
-		batch.begin();
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.BROWN);
+		shapeRenderer.arc(x, y, radius, 90, angel);
+		shapeRenderer.end();
 	}
 	
+	public static void DrawCoverLayer() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(CoverColor);
+		shapeRenderer.rect(0, 0, WIDTH, HEIGHT);
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+	}
+	
+	public static void DrawCoverCircle(float x, float y, float radius){
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(CoverColor);
+		shapeRenderer.circle(x, y, radius);
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+	}
+	
+//	static void DrawPauseButton(float x, float y, float width, float height,float interval){
+//	shapeRenderer.begin(ShapeType.Filled);
+//	shapeRenderer.setColor(86/255f, 86/255f, 86/255f, 1);
+//	DrawFilledRoundRect(x - 10 , y - 5, width + 10 * 2, height + 5 * 2, 10, shapeRenderer);
+//	shapeRenderer.setColor(220/255f, 220/255f, 220/255f, 1);
+//	shapeRenderer.rect(x, y, (width - interval)/2, height);
+//	shapeRenderer.rect(x + (width + interval)/2, y, (width - interval)/2, height);
+//	shapeRenderer.end();
+//}
 }

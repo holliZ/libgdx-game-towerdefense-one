@@ -3,6 +3,7 @@ package com.tower.defense.one.game.actor.enemy;
 import static com.tower.defense.one.game.Assets.shapeRenderer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -49,8 +50,8 @@ public class Enemy extends BasicActor {
 
 		if (HP != HPMax) {
 			batch.end();
+			shapeRenderer.setColor(Color.RED);
 			shapeRenderer.begin(ShapeType.Line);
-			shapeRenderer.setColor(1, 0, 0, 1);
 			shapeRenderer.rect(getX(), getY() - 3, getWidth(), 3);
 			shapeRenderer.end();
 

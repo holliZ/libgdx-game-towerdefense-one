@@ -17,16 +17,17 @@ public class Assets {
 	public static Music rainMusic;
 	public static Animation bob;
 
-	public static Texture items;
+//	public static Texture items;
 	public static Texture items2;
 
-	public static TextureRegion cannonIcon;
-	public static TextureRegion cryptIcon;
-	public static TextureRegion crossbowIcon;
-	public static TextureRegion apprenticeIcon;
-	public static TextureRegion poisonIcon;
-	public static TextureRegion lockingIcon;
+//	public static TextureRegion cannonIcon;
+//	public static TextureRegion cryptIcon;
+//	public static TextureRegion crossbowIcon;
+//	public static TextureRegion apprenticeIcon;
+//	public static TextureRegion poisonIcon;
+//	public static TextureRegion lockingIcon;
 
+	public static BitmapFont chinese;
 	public static BitmapFont font;
 	public static BitmapFont font2;
 	public static ShapeRenderer shapeRenderer ;
@@ -40,15 +41,15 @@ public class Assets {
 
 		rainMusic.setLooping(true);
 
-		items = loadTexture("data/towerIcon.png");
+//		items = loadTexture("data/towerIcon.png");
 		items2 = loadTexture("data/items.png");
 
-		cannonIcon = new TextureRegion(items, 0, 84, 62, 39);
-		cryptIcon = new TextureRegion(items, 64, 84, 61, 37);
-		crossbowIcon = new TextureRegion(items, 64, 41, 61, 41);
-		apprenticeIcon = new TextureRegion(items, 0, 0, 63, 39);
-		poisonIcon = new TextureRegion(items, 0, 41, 62, 41);
-		lockingIcon = new TextureRegion(items, 65, 0, 39, 37);
+//		cannonIcon = new TextureRegion(items, 0, 84, 62, 39);
+//		cryptIcon = new TextureRegion(items, 64, 84, 61, 37);
+//		crossbowIcon = new TextureRegion(items, 64, 41, 61, 41);
+//		apprenticeIcon = new TextureRegion(items, 0, 0, 63, 39);
+//		poisonIcon = new TextureRegion(items, 0, 41, 62, 41);
+//		lockingIcon = new TextureRegion(items, 65, 0, 39, 37);
 
 		bob = new Animation(0.2f, new TextureRegion(items2, 0, 128, 32, 32),
 				new TextureRegion(items2, 64, 128, 32, 32), new TextureRegion(
@@ -59,6 +60,8 @@ public class Assets {
 				Gdx.files.internal("data/font.png"), false);
 		font2 = new BitmapFont(Gdx.files.internal("data/font2.fnt"),
 				Gdx.files.internal("data/font2.png"), false);
+		chinese = new BitmapFont(Gdx.files.internal("data/chinese.fnt"),
+				Gdx.files.internal("data/chinese.png"), false);
 		
 		shapeRenderer = new ShapeRenderer();
 	}
@@ -69,11 +72,12 @@ public class Assets {
 		dropSound.dispose();
 		rainMusic.dispose();
 
-		items.dispose();
+//		items.dispose();
 		items2.dispose();
 		
 		font.dispose();
 		font2.dispose();
+		chinese.dispose();
 		shapeRenderer.dispose();
 	}
 

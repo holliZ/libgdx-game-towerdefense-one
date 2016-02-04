@@ -110,7 +110,9 @@ public class ChapterOne extends Table {
 	public void draw(Batch batch, float parentAlpha) {
 //		batch.draw(Assets.chapterOne, 0, 0);
 //		Utils.DrawRouteInLineByCorners(batch, corners);
-		Utils.DrawRouteInFilledByCorners(batch, corners);
+		batch.end();
+		Utils.DrawRouteInFilledByCorners(corners);
+		batch.begin();
 		super.draw(batch, parentAlpha);
 		Assets.font.draw(batch, "Time:" + (int)(accumulator), 0, 0 + 30);
 	}
@@ -130,4 +132,8 @@ public class ChapterOne extends Table {
 	    accumulator += frameTime * PlaySpeedButton.getSpeed();
 	}
 
+	public int getCurWaveIndex() {
+		return curWaveIndex;
+	}
+	
 }

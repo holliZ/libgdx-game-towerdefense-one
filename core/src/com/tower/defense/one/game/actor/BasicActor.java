@@ -1,15 +1,15 @@
 package com.tower.defense.one.game.actor;
 
-import static com.tower.defense.one.game.screen.GameScreen.lastTouchActorName;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 public class BasicActor extends Actor {
 	
 	private boolean record;
+	protected static String lastTouchActorName = "";
 	
 	public BasicActor(float x, float y, float width, float height){
 		this(x, y, width, height, true);
@@ -33,15 +33,24 @@ public class BasicActor extends Actor {
 	}
 	
 	public void onClick(){
-		Gdx.app.debug("BasicActor", "OnClick");
+		Gdx.app.debug(getName(), "OnClick " + getName() + " record=" + record + " lastTouchActorName=" + lastTouchActorName);
 		if(record && lastTouchActorName != null && lastTouchActorName.length() > 0) {
-			BasicActor actor = getParent().findActor(lastTouchActorName.split("_")[0]);
+			Group parent = getTopParent(getParent());
+			BasicActor actor = parent.findActor(lastTouchActorName.split("_")[0]);
 			if(actor != null) {
 				actor.hideWhenClickOthers();
 			} else {
 				lastTouchActorName = "";
 			}
 		}
+	}
+	
+	public Group getTopParent(Group parent){
+		Group preParent = parent.getParent();
+		if(preParent == null) {
+			return parent;
+		}
+		return getTopParent(preParent);
 	}
 	
 	public void hideWhenClickOthers() {

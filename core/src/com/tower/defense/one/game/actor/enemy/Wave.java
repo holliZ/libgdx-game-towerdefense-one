@@ -19,7 +19,7 @@ public class Wave {
 	private long lastGenerateTime = 0;
 	private float peasantInterval = 1.0f;
 	private boolean begin;
-	private int leftTime;
+	private float leftTime;
 	public static final int beCloseTime = 30;
 	private RightNowButton rightNowButton;
 	
@@ -49,7 +49,7 @@ public class Wave {
 		if(begin) {
 			return begin;
 		} else {
-			leftTime = (int) (delayTime - accumulator);
+			leftTime = delayTime - accumulator;
 			if(leftTime <= 0){
 				rightNow();
 			} else if(rightNowButton == null && leftTime <= beCloseTime) {
@@ -95,7 +95,9 @@ public class Wave {
 			rightNowButton = null;
 		}
 		chapter.rightNow(delayTime);
-		BGPanel.addTreasure(Math.max(leftTime,0) * 1); 
+		if(chapter.getCurWaveIndex() > 0) {
+			BGPanel.addTreasure(Math.max((int)leftTime,0) * 1); 
+		}
 	}
 	
 	public float getWaveBeignX(){
@@ -106,7 +108,7 @@ public class Wave {
 		return route.getPoint(0).getY();
 	}
 	
-	public int getLeftTime() {
+	public float getLeftTime() {
 		return leftTime;
 	}
 	

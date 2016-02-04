@@ -3,12 +3,15 @@ package com.tower.defense.one.game.actor.bg;
 import static com.tower.defense.one.game.Assets.font;
 import static com.tower.defense.one.game.Assets.shapeRenderer;
 import static com.tower.defense.one.game.Const.HEIGHT;
+import static com.tower.defense.one.game.Const.SplitLinesColor;
 import static com.tower.defense.one.game.Const.WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.tower.defense.one.game.actor.button.PauseButton;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
+import com.tower.defense.one.game.screen.GameScreen;
 
 public class BGPanel extends Table{
 	
@@ -22,10 +25,11 @@ public class BGPanel extends Table{
 	int waveIndex = 0;
 	int waveMax = 10;
 
-	public BGPanel(int waveMax) {
+	public BGPanel(final GameScreen gameScreen, int waveMax) {
 		setBounds(0, 0, WIDTH, HEIGHT);
 		this.waveMax = waveMax;
 		addActor(new PlaySpeedButton());
+		addActor(new PauseButton(gameScreen));
 	}
 	
 	public void init() {
@@ -44,8 +48,10 @@ public class BGPanel extends Table{
 	public void draw(Batch batch, float parentAlpha) {
 		batch.end();
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(72 / 255f, 22 / 255f, 15 / 255f, 1f);
-		shapeRenderer.rect(0, HEIGHT - 45, WIDTH, 2);
+		
+		shapeRenderer.setColor(SplitLinesColor);
+		shapeRenderer.rect(0, HEIGHT - 45, WIDTH, 3);
+		
 		shapeRenderer.end();
 		batch.begin();
 		

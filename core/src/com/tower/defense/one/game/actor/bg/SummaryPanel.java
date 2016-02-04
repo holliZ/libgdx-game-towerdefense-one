@@ -5,6 +5,8 @@ import static com.tower.defense.one.game.Assets.font2;
 import static com.tower.defense.one.game.Assets.shapeRenderer;
 import static com.tower.defense.one.game.Const.HEIGHT;
 import static com.tower.defense.one.game.Const.WIDTH;
+import static com.tower.defense.one.game.Const.SummaryColor;
+import static com.tower.defense.one.game.Const.SplitLinesColor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -40,29 +42,23 @@ public class SummaryPanel extends Table {
 	public void draw(Batch batch, float parentAlpha) {
 		batch.end();
 		
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(141/255f, 141/255f, 141/255f, 120/255f);
-		shapeRenderer.rect(0, 0, WIDTH, HEIGHT);
-		shapeRenderer.end();
-		Gdx.gl.glDisable(GL20.GL_BLEND);
+		Utils.DrawCoverLayer();
 		
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(191/255f, 191/255f, 191/255f, 0.8f);
+		shapeRenderer.setColor(SummaryColor);
 		Utils.DrawFilledRoundRect(WIDTH / 2 - W / 2, HEIGHT / 2 - H / 2, W, H,
 				radius, shapeRenderer);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(191/255f, 191/255f, 191/255f, 1f);
+		shapeRenderer.setColor(SummaryColor);
 		Utils.DrawFilledRoundRect(WIDTH / 2 - W2 / 2, HEIGHT / 2 - H2 / 2, W2, H2,
 				radius, shapeRenderer);
 		
-		shapeRenderer.setColor(72 / 255f, 22 / 255f, 15 / 255f, 1f);
+		shapeRenderer.setColor(SplitLinesColor);
 		shapeRenderer.rect(WIDTH / 2 - W / 2 + 10, HEIGHT / 2 + H / 2 - radius * 14 / 5, W - 20, 2);
 		shapeRenderer.end();
 

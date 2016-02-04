@@ -19,7 +19,6 @@ import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 
 import static com.tower.defense.one.game.Assets.shapeRenderer;
-import static com.tower.defense.one.game.screen.GameScreen.lastTouchActorName;
 
 public class Tower extends BasicActor {
 
@@ -30,14 +29,13 @@ public class Tower extends BasicActor {
 	float offsetX, offsetY;
 	Color towerColor;
 	Color ATKColor;
-	static int COST = 100;
-	Color ATKBoundColor = new Color(219/255f, 163/255f, 27/255f, 0.5f);
+	Color ATKBoundColor;
 
 	protected int ATKCount = 0;// 本次已经攻击的敌人数目
 	private Ellipse ATKEllipse;
 	private Ellipse boundEllipse;
 	protected long lastATKTime = 0;// 用来判定该塔是否可以攻击
-	private boolean showAction = false;
+	protected boolean showAction = false;
 
 	public Tower(float x, float y) {//传入中心位置
 		super(x - Const.TOWER_WIDTH/2, y - Const.TOWER_HEIGHT/2, Const.TOWER_WIDTH, Const.TOWER_HEIGHT);
@@ -45,18 +43,18 @@ public class Tower extends BasicActor {
 		offsetY = y;
 		ATKEllipse = new Ellipse(x, y, 0, 0);//椭圆为了判定hit需要传入的是中心位置已经宽高，但是绘制的时候需要传入的是顶点位置，这一点需要注意
 		boundEllipse = new Ellipse(x , y, Const.TOWER_WIDTH, Const.TOWER_HEIGHT);
-		towerColor = new Color(219/255f, 163/255f, 27/255f, 0.5f);
+		towerColor = new Color(Const.DefaultTowerColor);
 		ATKColor = new Color(1, 0, 0, 1);
 	}
 	
 	public void init() {
 		Array<Point> points = generateTowerOptionPosition(offsetX, offsetY);
 		
-		newTowerOption(points.get(0).getX(), points.get(0).getY(), TowerOption.CANNON, getName(), false);
-		newTowerOption(points.get(1).getX(), points.get(1).getY(), TowerOption.CRYPT, getName(), true);
-		newTowerOption(points.get(2).getX(), points.get(2).getY(), TowerOption.CROSSBOW, getName(), true);
-		newTowerOption(points.get(3).getX(), points.get(3).getY(), TowerOption.APPRENTICE, getName(), true);
-		newTowerOption(points.get(4).getX(), points.get(4).getY(), TowerOption.POISON, getName(), true);
+		newTowerOption(points.get(0).getX(), points.get(0).getY(), TowerTypeOption.CANNON, getName(), false);
+		newTowerOption(points.get(1).getX(), points.get(1).getY(), TowerTypeOption.CRYPT, getName(), true);
+		newTowerOption(points.get(2).getX(), points.get(2).getY(), TowerTypeOption.CROSSBOW, getName(), true);
+		newTowerOption(points.get(3).getX(), points.get(3).getY(), TowerTypeOption.APPRENTICE, getName(), true);
+		newTowerOption(points.get(4).getX(), points.get(4).getY(), TowerTypeOption.POISON, getName(), true);
 	}
 	
 	private Array<Point> generateTowerOptionPosition(float x, float y){
@@ -71,10 +69,10 @@ public class Tower extends BasicActor {
 	}
 	
 	private void newTowerOption(float x, float y, int type, String towerName, boolean locked){
-		TowerOption TowerOption= new TowerOption(x, y , type, locked);
-		TowerOption.setName(towerName + "_" + type);
-		TowerOption.setVisible(false);
-		getParent().addActorAfter(this, TowerOption);
+		TowerTypeOption option= new TowerTypeOption(x, y , type, locked);
+		option.setName(towerName + "_" + type);
+		option.setVisible(false);
+		getParent().addActorAfter(this, option);
 	}
 	
 	void updateATKBound(float atkWidth, float atkHeight){
@@ -189,22 +187,18 @@ public class Tower extends BasicActor {
 	
 	void showOrHideOption(){
 		showAction = !showAction;
-		showOrHideOption(TowerOption.CANNON);
-		showOrHideOption(TowerOption.CRYPT);
-		showOrHideOption(TowerOption.CROSSBOW);
-		showOrHideOption(TowerOption.APPRENTICE);
-		showOrHideOption(TowerOption.POISON);
+		showOrHideOption(TowerTypeOption.CANNON);
+		showOrHideOption(TowerTypeOption.CRYPT);
+		showOrHideOption(TowerTypeOption.CROSSBOW);
+		showOrHideOption(TowerTypeOption.APPRENTICE);
+		showOrHideOption(TowerTypeOption.POISON);
 	}
 	
 	private void showOrHideOption(int type) {
-		TowerOption towerType = getParent().findActor(getName() + "_" + type);
+		TowerTypeOption towerType = getParent().findActor(getName() + "_" + type);
 		if(towerType != null) {
 			towerType.setVisible(showAction);
 		}
 	}
 
-	public static int getCOST() {
-		return COST;
-	}
-	
 }

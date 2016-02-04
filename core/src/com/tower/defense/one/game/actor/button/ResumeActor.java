@@ -1,5 +1,7 @@
 package com.tower.defense.one.game.actor.button;
 
+import static com.tower.defense.one.game.Const.ACTION_BUTTON_HEIGHT;
+import static com.tower.defense.one.game.Const.ACTION_BUTTON_WIDTH;
 import static com.tower.defense.one.game.Const.GAME_RUNNING;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,7 +13,8 @@ public class ResumeActor extends BasicActor {
 
 	final GameScreen gameScreen;
 	public ResumeActor(final GameScreen gameScreen, float offsetX, float offsetY) {
-		super(offsetX - 150 /2, offsetY - 35/2, 150, 35, false);
+		super(offsetX - ACTION_BUTTON_WIDTH / 2, offsetY - ACTION_BUTTON_HEIGHT
+				/ 2, ACTION_BUTTON_WIDTH, ACTION_BUTTON_HEIGHT, false);
 		this.gameScreen = gameScreen;
 	}
 	

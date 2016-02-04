@@ -1,6 +1,8 @@
 package com.tower.defense.one.game.actor.button;
 
-import static com.tower.defense.one.game.Const.*;
+import static com.tower.defense.one.game.Const.GAME_PAUSED;
+import static com.tower.defense.one.game.Const.HEIGHT;
+import static com.tower.defense.one.game.Const.WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.tower.defense.one.game.Utils;
@@ -11,7 +13,7 @@ public class PauseButton extends BasicActor {
 	
 	final GameScreen gameScreen;
 	public PauseButton(final GameScreen gameScreen) {
-		super(WIDTH - 50, HEIGHT - 40, 45, 36, false);
+		super(WIDTH - 50, HEIGHT - 40, 45, 36, true);
 		this.gameScreen = gameScreen;
 	}
 
@@ -24,8 +26,6 @@ public class PauseButton extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		if(gameScreen.getGameState() == GAME_RUNNING) {
-			Utils.DrawButtonByFont(batch, "II", getX(), getY(), getWidth(), getHeight());
-		}
+		Utils.DrawButtonByFont(batch, "II", getX(), getY(), getWidth(), getHeight());
 	}
 }

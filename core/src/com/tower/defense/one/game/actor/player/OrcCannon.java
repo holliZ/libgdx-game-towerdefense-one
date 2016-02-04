@@ -3,7 +3,6 @@ package com.tower.defense.one.game.actor.player;
 import static com.tower.defense.one.game.Assets.shapeRenderer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
@@ -21,7 +20,7 @@ public class OrcCannon extends Tower {
 	public static final int Level2 = 2;
 	public static final int Level3 = 3;
 	
-	static Color ATKBoundColor = new Color(183/255f, 32/255f, 238/255f, 1);
+	static int COST = 110;
 	
 	protected Circle cannonBall;
 	private Route cannonBallRoute;
@@ -29,11 +28,10 @@ public class OrcCannon extends Tower {
 	
 	public OrcCannon(float x, float y) {
 		super(x, y);
-		COST = 110;
 		ATK = 100;
 		ATKSpeed = 13f;
 		ATKColor = null;
-		towerColor.set(183/255f, 32/255f, 238/255f, 1);
+		towerColor.set(Const.CannonColor);
 		cannonBall = new Circle(-50, - 50, 20);
 		updateATKBound(getATKWidth(Level1), getATKHeight(Level1));
 	}
@@ -67,6 +65,12 @@ public class OrcCannon extends Tower {
 	@Override
 	void showOrHideOption() {
 		Gdx.app.debug("OrcCannon", "showOrHideTowerType");
+		showAction = !showAction;
+		if(showAction) {
+			ATKBoundColor = Const.CannonColor;
+		} else {
+			ATKBoundColor = null;
+		}
 	}
 
 	@Override
