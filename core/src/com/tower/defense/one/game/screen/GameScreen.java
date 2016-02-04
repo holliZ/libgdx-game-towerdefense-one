@@ -18,7 +18,6 @@ import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.bg.PausePanel;
 import com.tower.defense.one.game.actor.bg.SummaryPanel;
 import com.tower.defense.one.game.actor.button.PauseButton;
-import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 import com.tower.defense.one.game.chapters.ChapterOne;
 
 public class GameScreen implements Screen {
@@ -28,7 +27,6 @@ public class GameScreen implements Screen {
 	SummaryPanel summaryPanel;
 	PausePanel pausePanel;
 	PauseButton pauseButton;
-	PlaySpeedButton playSpeedButton;
 	ChapterOne chapter;
 	BGPanel bgPanel;
 	int gameState;
@@ -47,9 +45,6 @@ public class GameScreen implements Screen {
 		
 		bgPanel = new BGPanel(chapter.getWaveMax());
 		stage.addActor(bgPanel);
-		
-		playSpeedButton = new PlaySpeedButton();
-		stage.addActor(playSpeedButton);
 		
 		pauseButton = new PauseButton(this);
 		stage.addActor(pauseButton);

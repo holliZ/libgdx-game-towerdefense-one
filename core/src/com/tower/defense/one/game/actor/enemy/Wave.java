@@ -5,9 +5,12 @@ import com.tower.defense.one.game.Const;
 import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 import com.tower.defense.one.game.actor.button.RightNowButton;
+import com.tower.defense.one.game.chapters.ChapterOne;
 import com.tower.defense.one.game.map.Route;
 
 public class Wave {
+	
+	final ChapterOne chapter;
 	
 	private int peasantNum = 0;
 	private Route route;
@@ -17,11 +20,11 @@ public class Wave {
 	private float peasantInterval = 1.0f;
 	private boolean begin;
 	private int leftTime;
-	private final int beCloseTime = 15;
+	public static final int beCloseTime = 30;
 	private RightNowButton rightNowButton;
-	private boolean firstEnemy = false;
 	
-	public Wave(Route route, int delayTime){
+	public Wave(final ChapterOne chapter, Route route, int delayTime){
+		this.chapter = chapter;
 		this.route = route;
 		this.delayTime = delayTime;
 		begin = false;
@@ -42,14 +45,16 @@ public class Wave {
 		return leftEnemy;
 	}
 	
-	public boolean begin(long lastWaveBeginTime){
+	public boolean begin(float accumulator){
 		if(begin) {
 			return begin;
 		} else {
-			System.out.println("leftTime:" + leftTime);
-			leftTime = (int) (delayTime - TimeUtils.timeSinceNanos(lastWaveBeginTime)/Const.ONE_SECOND );
-			if(TimeUtils.timeSinceNanos(lastWaveBeginTime) > Const.ONE_SECOND/ PlaySpeedButton.getSpeed() * delayTime){
-				righrNow();
+			leftTime = (int) (delayTime - accumulator);
+			if(leftTime <= 0){
+				rightNow();
+			} else if(rightNowButton == null && leftTime <= beCloseTime) {
+				rightNowButton = new RightNowButton(this);
+				chapter.addActorAt(6, rightNowButton);
 			}
 		}
 		return begin;
@@ -83,13 +88,14 @@ public class Wave {
 		return leftEnemy > 0;
 	}
 
-	public void righrNow(){
+	public void rightNow(){
 		begin = true;
-		firstEnemy = true;
 		if(rightNowButton != null) {
 			rightNowButton.remove();
 			rightNowButton = null;
 		}
+		chapter.rightNow(delayTime);
+		BGPanel.addTreasure(Math.max(leftTime,0) * 1); 
 	}
 	
 	public float getWaveBeignX(){
@@ -100,29 +106,8 @@ public class Wave {
 		return route.getPoint(0).getY();
 	}
 	
-	public void setRightNowButton(RightNowButton rightNowButton) {
-		System.out.println("setRightNowButton:" + leftTime);
-		this.rightNowButton = rightNowButton;
-	}
-	
-	public RightNowButton getRightNowButton() {
-		return rightNowButton;
-	}
-
-	public boolean isFirstEnemy() {
-		return firstEnemy;
-	}
-
-	public void setFirstEnemy(boolean firstEnemy) {
-		this.firstEnemy = firstEnemy;
-	}
-
 	public int getLeftTime() {
 		return leftTime;
-	}
-
-	public int getDelayTime() {
-		return delayTime;
 	}
 	
 }

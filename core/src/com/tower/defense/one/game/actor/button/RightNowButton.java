@@ -22,7 +22,7 @@ public class RightNowButton extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		Utils.DrawRightNowButton(batch, rightNowCircle.x, rightNowCircle.y, rightNowCircle.radius, 360 * wave.getLeftTime()/wave.getDelayTime() );
+		Utils.DrawRightNowButton(batch, rightNowCircle.x, rightNowCircle.y, rightNowCircle.radius, 360 * (wave.getLeftTime() + 1)/Wave.beCloseTime);
 	}
 	
 	@Override
@@ -35,6 +35,6 @@ public class RightNowButton extends BasicActor {
 	@Override
 	public void onClick() {
 		super.onClick();
-		wave.righrNow();
+		wave.rightNow();
 	}
 }

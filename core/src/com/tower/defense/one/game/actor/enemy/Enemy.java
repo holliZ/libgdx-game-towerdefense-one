@@ -66,7 +66,7 @@ public class Enemy extends BasicActor {
 	public void act(float delta) {
 		super.act(delta);
 
-		stateTime += delta;
+		stateTime += delta * PlaySpeedButton.getSpeed();
 
 		if (HP > 0) {
 			if (canMove()) {
