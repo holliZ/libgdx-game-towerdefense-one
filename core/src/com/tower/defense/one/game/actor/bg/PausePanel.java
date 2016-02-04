@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.tower.defense.one.game.actor.button.RestartButton;
 import com.tower.defense.one.game.actor.button.ResumeActor;
 import com.tower.defense.one.game.screen.GameScreen;
 
@@ -18,6 +19,7 @@ public class PausePanel extends Table{
 		setBounds(0, 0, WIDTH, HEIGHT);
 		setVisible(false);
 		addActorAfter(this, new ResumeActor(gameScreen, WIDTH / 2 , HEIGHT / 2 + 50));
+		addActorAfter(this, new RestartButton(gameScreen, WIDTH / 2, HEIGHT / 2));
 	}
 	
 	@Override

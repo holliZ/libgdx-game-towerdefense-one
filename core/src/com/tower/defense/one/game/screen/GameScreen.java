@@ -9,6 +9,7 @@ import static com.tower.defense.one.game.Const.WIDTH;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -17,7 +18,6 @@ import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.bg.PausePanel;
 import com.tower.defense.one.game.actor.bg.SummaryPanel;
 import com.tower.defense.one.game.actor.button.PauseButton;
-import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 import com.tower.defense.one.game.chapters.ChapterOne;
 
 public class GameScreen implements Screen {
@@ -27,7 +27,6 @@ public class GameScreen implements Screen {
 	SummaryPanel summaryPanel;
 	PausePanel pausePanel;
 	PauseButton pauseButton;
-	PlaySpeedButton playSpeedButton;
 	ChapterOne chapter;
 	BGPanel bgPanel;
 	int gameState;
@@ -35,6 +34,8 @@ public class GameScreen implements Screen {
 	public static String lastTouchActorName = "";
 	
 	public GameScreen(final TowerDefense game) {
+		Box2D.init();
+		
 		this.game = game;
 		stage = new Stage(new FitViewport(WIDTH, HEIGHT));
 //		stage.getCamera().rotate(stage.getCamera().direction, -10);
@@ -45,9 +46,6 @@ public class GameScreen implements Screen {
 		bgPanel = new BGPanel(chapter.getWaveMax());
 		stage.addActor(bgPanel);
 		
-		playSpeedButton = new PlaySpeedButton();
-		stage.addActor(playSpeedButton);
-		
 		pauseButton = new PauseButton(this);
 		stage.addActor(pauseButton);
 		
@@ -56,6 +54,7 @@ public class GameScreen implements Screen {
 		
 		summaryPanel = new SummaryPanel(this);
 		stage.addActor(summaryPanel);
+		
 		
 		startGame();
 	}

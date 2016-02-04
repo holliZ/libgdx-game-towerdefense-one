@@ -8,6 +8,7 @@ import static com.tower.defense.one.game.Const.WIDTH;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 
 public class BGPanel extends Table{
 	
@@ -24,6 +25,7 @@ public class BGPanel extends Table{
 	public BGPanel(int waveMax) {
 		setBounds(0, 0, WIDTH, HEIGHT);
 		this.waveMax = waveMax;
+		addActor(new PlaySpeedButton());
 	}
 	
 	public void init() {
@@ -35,6 +37,7 @@ public class BGPanel extends Table{
 		Star = 3;
 		ChapterReward = 0;
 		setVisible(true);
+		PlaySpeedButton.initSpeed();
 	}
 
 	@Override

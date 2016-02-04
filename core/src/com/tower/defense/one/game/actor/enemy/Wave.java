@@ -4,9 +4,13 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.one.game.Const;
 import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
+import com.tower.defense.one.game.actor.button.RightNowButton;
+import com.tower.defense.one.game.chapters.ChapterOne;
 import com.tower.defense.one.game.map.Route;
 
 public class Wave {
+	
+	final ChapterOne chapter;
 	
 	private int peasantNum = 0;
 	private Route route;
@@ -15,8 +19,12 @@ public class Wave {
 	private long lastGenerateTime = 0;
 	private float peasantInterval = 1.0f;
 	private boolean begin;
+	private int leftTime;
+	public static final int beCloseTime = 30;
+	private RightNowButton rightNowButton;
 	
-	public Wave(Route route, int delayTime){
+	public Wave(final ChapterOne chapter, Route route, int delayTime){
+		this.chapter = chapter;
 		this.route = route;
 		this.delayTime = delayTime;
 		begin = false;
@@ -37,15 +45,27 @@ public class Wave {
 		return leftEnemy;
 	}
 	
-	public boolean begin(long lastWaveBeginTime){
+	public boolean begin(float accumulator){
 		if(begin) {
 			return begin;
 		} else {
-			if(TimeUtils.timeSinceNanos(lastWaveBeginTime) > Const.ONE_SECOND/ PlaySpeedButton.getSpeed() * delayTime){
-				begin = true;
+			leftTime = (int) (delayTime - accumulator);
+			if(leftTime <= 0){
+				rightNow();
+			} else if(rightNowButton == null && leftTime <= beCloseTime) {
+				rightNowButton = new RightNowButton(this);
+				chapter.addActorAt(6, rightNowButton);
 			}
 		}
 		return begin;
+	}
+	
+	public boolean isCreateRightNowButton(){
+		if(rightNowButton == null && leftTime <= beCloseTime) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public Enemy generate(){
@@ -68,4 +88,26 @@ public class Wave {
 		return leftEnemy > 0;
 	}
 
+	public void rightNow(){
+		begin = true;
+		if(rightNowButton != null) {
+			rightNowButton.remove();
+			rightNowButton = null;
+		}
+		chapter.rightNow(delayTime);
+		BGPanel.addTreasure(Math.max(leftTime,0) * 1); 
+	}
+	
+	public float getWaveBeignX(){
+		return route.getPoint(0).getX();
+	}
+
+	public float getWaveBeignY(){
+		return route.getPoint(0).getY();
+	}
+	
+	public int getLeftTime() {
+		return leftTime;
+	}
+	
 }
