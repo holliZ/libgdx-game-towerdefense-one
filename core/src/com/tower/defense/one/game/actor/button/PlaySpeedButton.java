@@ -4,7 +4,7 @@ import static com.tower.defense.one.game.Const.HEIGHT;
 import static com.tower.defense.one.game.Const.WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.tower.defense.one.game.Utils;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.BasicActor;
 
 public class PlaySpeedButton extends BasicActor {
@@ -30,7 +30,7 @@ public class PlaySpeedButton extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		Utils.DrawButtonByFont(batch, "[" + speed +"]", getX(), getY(), getWidth(), getHeight());
+		ShaperRendererUtils.DrawTopFontButton(batch, "[" + speed +"]", getX(), getY(), getWidth(), getHeight());
 	}
 	
 	public static int getSpeed(){

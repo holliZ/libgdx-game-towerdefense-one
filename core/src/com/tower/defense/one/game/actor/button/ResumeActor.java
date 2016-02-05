@@ -5,7 +5,8 @@ import static com.tower.defense.one.game.Const.ACTION_BUTTON_WIDTH;
 import static com.tower.defense.one.game.Const.GAME_RUNNING;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.tower.defense.one.game.Utils;
+import com.tower.defense.one.game.Const;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.BasicActor;
 import com.tower.defense.one.game.screen.GameScreen;
 
@@ -21,7 +22,7 @@ public class ResumeActor extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		Utils.DrawButtonByFont(batch, "Resume", getX(), getY(), getWidth(), getHeight());
+		ShaperRendererUtils.DrawFontButton(batch, "Resume", getX(), getY(), getWidth(), getHeight(), Const.ButtonInnerAColor);
 	}
 	
 	@Override

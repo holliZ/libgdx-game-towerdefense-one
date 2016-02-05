@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.tower.defense.one.game.Assets;
 import com.tower.defense.one.game.TowerDefense;
 import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.bg.PausePanel;
@@ -59,8 +60,10 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(158/255f, 172/255f, 66/255f, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//		Gdx.gl.glLineWidth(5);
+		Assets.shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
 		switch(gameState){
 		case GAME_RUNNING:
 			stage.act(delta);

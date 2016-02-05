@@ -10,14 +10,72 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.utils.Align;
 
-public class Utils {
-
+public class ShaperRendererUtils {
+	
+	private static boolean alpha = false;
+	
+	public static void EnableAlpha(){
+		alpha = true;
+	}
+	
+	public static void DrawRectangle(float x, float y, float width, float height, Color color, ShapeType type){
+		if(alpha) {
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		}
+		shapeRenderer.begin(type);
+		shapeRenderer.setColor(color);
+		shapeRenderer.rect(x, y, width, height);
+		shapeRenderer.end();
+		if(alpha) {
+			Gdx.gl.glDisable(GL20.GL_BLEND);
+		}
+		alpha = false;
+	}
+	
+	public static void DrawEllipse(Ellipse ellipse, Color color, ShapeType type) {
+		if(alpha) {
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		}
+		shapeRenderer.begin(type);
+		shapeRenderer.setColor(color);
+		shapeRenderer.ellipse(ellipse.x - ellipse.width/2, ellipse.y - ellipse.height/2, ellipse.width, ellipse.height);
+		shapeRenderer.end();
+		if(alpha) {
+			Gdx.gl.glDisable(GL20.GL_BLEND);
+		}
+		alpha = false;
+	}
+	
+	public static void DrawCircle(Circle circle, Color color, ShapeType type){
+		DrawCircle(circle.x, circle.y, circle.radius, color, type);
+	}
+	
+	public static void DrawCircle(float x, float y, float radius, Color color, ShapeType type){
+		if(alpha) {
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		}
+		shapeRenderer.begin(type);
+		shapeRenderer.setColor(color);
+		shapeRenderer.circle(x, y, radius);
+		shapeRenderer.end();
+		if(alpha) {
+			Gdx.gl.glDisable(GL20.GL_BLEND);
+		}
+		alpha = false;
+	}
+	
 	public static void DrawFilledRoundRect(float x, float y, float width,
-			float height, float radius, ShapeRenderer shapeRenderer) {
+			float height, float radius, Color color) {
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(color);
 		shapeRenderer.rect(x + radius, y, width - radius * 2, height);
 		shapeRenderer.rect(x, y + radius, width, height - radius * 2);
 		
@@ -26,59 +84,58 @@ public class Utils {
 		
 		shapeRenderer.circle(x + radius, y + height - radius, radius);
 		shapeRenderer.circle(x + width - radius, y + height - radius, radius);
+		shapeRenderer.end();
 	}
 	
-
-	
-	public static void DrawButtonByFont(Batch batch, String s, float x, float y, float width, float height){
+	public static void DrawTopFontButton(Batch batch, String s, float x, float y, float width, float height){
 		batch.end();
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Const.ButtonBGColor);
-		DrawFilledRoundRect(x ,y ,width, height, 10, shapeRenderer);
-		shapeRenderer.end();
+		DrawFilledRoundRect(x-2 ,y-2 ,width+4, height+4, 10, Const.ButtonOuterColor);
+		DrawFilledRoundRect(x ,y ,width, height, 10, Const.TopButtonBGColor);
 		batch.begin();
 		font.draw(batch, s, x, y + 30, width, Align.center, false);
 	}
 	
-	public static void DrawRouteInLineByCorners(float[][] corners){
-		int radius = 30;
-		float lastX, lastY, nextX, nextY;
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Const.RouteColor);
-		if(corners.length > 0) {
-			lastX = corners[0][0];
-			lastY = corners[0][1];
-			for(int i = 1; i < corners.length; i++){
-				nextX = corners[i][0];
-				nextY = corners[i][1];
-				shapeRenderer.line(lastX, lastY - radius, nextX, nextY - radius);
-				shapeRenderer.line(lastX, lastY + radius, nextX, nextY + radius);
-				lastX = nextX;
-				lastY = nextY;
-			}
-		}
-		shapeRenderer.end();
+	public static void DrawFontButton(Batch batch, String s, float x, float y, float width, float height, Color color) {
+		batch.end();
+		DrawFilledRoundRect(x-2 ,y-2 ,width+4, height+4, 10, Const.ButtonOuterColor);
+		DrawFilledRoundRect(x ,y ,width, height, 10, color);
+		batch.begin();
+		font.draw(batch, s, x, y + 30, width, Align.center, false);
 	}
 	
-	public static void DrawRouteInFilledByCorners(float[][] corners){
+	public static void DrawRouteByCorners(float[][] corners, ShapeType type){
 		int radius = 30;
 		float lastX, lastY, nextX, nextY;
-		shapeRenderer.begin(ShapeType.Filled);
+		if(alpha) {
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		}
+		shapeRenderer.begin(type);
 		shapeRenderer.setColor(Const.RouteColor);
-		shapeRenderer.identity();
 		if(corners.length > 0) {
 			lastX = corners[0][0];
 			lastY = corners[0][1];
 			for(int i = 1; i < corners.length; i++){
 				nextX = corners[i][0];
 				nextY = corners[i][1];
-				shapeRenderer.circle(lastX, lastY, radius);
-				drawObliqueRect(lastX, lastY, nextX, nextY, radius * 2);
+				if(type == ShapeType.Line) {
+					shapeRenderer.line(lastX, lastY - radius, nextX, nextY - radius);
+					shapeRenderer.line(lastX, lastY + radius, nextX, nextY + radius);
+				} else if(type == ShapeType.Filled) {
+					shapeRenderer.circle(lastX, lastY, radius);
+					drawObliqueRect(lastX, lastY, nextX, nextY, radius * 2);
+				}
 				lastX = nextX;
 				lastY = nextY;
 			}
+			if(type == ShapeType.Filled) {
+				shapeRenderer.circle(lastX, lastY, radius);
+			}
 		}
 		shapeRenderer.end();
+		if(alpha) {
+			Gdx.gl.glDisable(GL20.GL_BLEND);
+		}
 	}
 	
 	private static void drawObliqueRect(float leftCenterX1, float leftCenterY1, float leftCenterX2, float leftCenterY2, float newHeight) {
@@ -106,14 +163,12 @@ public class Utils {
 	}
 	
 	public static void DrawRightNowButton(float x, float y, float radius, float angel) {
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BROWN);
-		shapeRenderer.circle(x, y, radius);
-		shapeRenderer.end();
+		DrawCircle(x, y, radius, Const.RightNowOuterColor, ShapeType.Filled);
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Color.BROWN);
-		shapeRenderer.arc(x, y, radius, 90, angel);
+		shapeRenderer.setColor(Const.RightNowMiddleColor);
+		shapeRenderer.arc(x, y, radius - 3, 90, angel);
 		shapeRenderer.end();
+		DrawCircle(x, y, radius - 5, Const.RightNowInnerColor, ShapeType.Filled);
 	}
 	
 	public static void DrawCoverLayer() {

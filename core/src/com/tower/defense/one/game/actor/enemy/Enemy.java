@@ -1,7 +1,5 @@
 package com.tower.defense.one.game.actor.enemy;
 
-import static com.tower.defense.one.game.Assets.shapeRenderer;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -10,11 +8,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.one.game.Assets;
 import com.tower.defense.one.game.Const;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.BasicActor;
 import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
-import com.tower.defense.one.game.map.Route;
 import com.tower.defense.one.game.map.Point;
+import com.tower.defense.one.game.map.Route;
 
 public class Enemy extends BasicActor {
 
@@ -50,14 +49,8 @@ public class Enemy extends BasicActor {
 
 		if (HP != HPMax) {
 			batch.end();
-			shapeRenderer.setColor(Color.RED);
-			shapeRenderer.begin(ShapeType.Line);
-			shapeRenderer.rect(getX(), getY() - 3, getWidth(), 3);
-			shapeRenderer.end();
-
-			shapeRenderer.begin(ShapeType.Filled);
-			shapeRenderer.rect(getX(), getY() - 3, getWidth() * ((float)HP / HPMax), 3);
-			shapeRenderer.end();
+			ShaperRendererUtils.DrawRectangle(getX(), getY() - 3, getWidth(), 3, Color.RED, ShapeType.Line);
+			ShaperRendererUtils.DrawRectangle(getX(), getY() - 3, getWidth() * ((float)HP / HPMax), 3, Color.RED, ShapeType.Line);
 			batch.begin();
 		}
 

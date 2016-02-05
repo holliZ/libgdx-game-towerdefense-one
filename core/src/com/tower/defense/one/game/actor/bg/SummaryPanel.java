@@ -2,18 +2,17 @@ package com.tower.defense.one.game.actor.bg;
 
 import static com.tower.defense.one.game.Assets.font;
 import static com.tower.defense.one.game.Assets.font2;
-import static com.tower.defense.one.game.Assets.shapeRenderer;
 import static com.tower.defense.one.game.Const.HEIGHT;
-import static com.tower.defense.one.game.Const.WIDTH;
-import static com.tower.defense.one.game.Const.SummaryColor;
 import static com.tower.defense.one.game.Const.SplitLinesColor;
+import static com.tower.defense.one.game.Const.SummaryColor;
+import static com.tower.defense.one.game.Const.WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.tower.defense.one.game.Utils;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.button.NextButton;
 import com.tower.defense.one.game.actor.button.RestartButton;
 import com.tower.defense.one.game.screen.GameScreen;
@@ -42,25 +41,17 @@ public class SummaryPanel extends Table {
 	public void draw(Batch batch, float parentAlpha) {
 		batch.end();
 		
-		Utils.DrawCoverLayer();
+		ShaperRendererUtils.DrawCoverLayer();
 		
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(SummaryColor);
-		Utils.DrawFilledRoundRect(WIDTH / 2 - W / 2, HEIGHT / 2 - H / 2, W, H,
-				radius, shapeRenderer);
-		shapeRenderer.end();
+		ShaperRendererUtils.DrawFilledRoundRect(WIDTH / 2 - W / 2, HEIGHT / 2 - H / 2, W, H,
+				radius, SummaryColor);
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(SummaryColor);
-		Utils.DrawFilledRoundRect(WIDTH / 2 - W2 / 2, HEIGHT / 2 - H2 / 2, W2, H2,
-				radius, shapeRenderer);
-		
-		shapeRenderer.setColor(SplitLinesColor);
-		shapeRenderer.rect(WIDTH / 2 - W / 2 + 10, HEIGHT / 2 + H / 2 - radius * 14 / 5, W - 20, 2);
-		shapeRenderer.end();
+		ShaperRendererUtils.DrawFilledRoundRect(WIDTH / 2 - W2 / 2, HEIGHT / 2 - H2 / 2, W2, H2,
+				radius, SummaryColor);
+		ShaperRendererUtils.DrawRectangle(WIDTH / 2 - W / 2 + 10, HEIGHT / 2 + H / 2 - radius * 14 / 5, W - 20, 2, SplitLinesColor, ShapeType.Filled);
 
 		batch.begin();
 		

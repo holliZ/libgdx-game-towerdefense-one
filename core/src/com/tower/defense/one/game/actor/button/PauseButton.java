@@ -5,7 +5,7 @@ import static com.tower.defense.one.game.Const.HEIGHT;
 import static com.tower.defense.one.game.Const.WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.tower.defense.one.game.Utils;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.BasicActor;
 import com.tower.defense.one.game.screen.GameScreen;
 
@@ -26,6 +26,6 @@ public class PauseButton extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		Utils.DrawButtonByFont(batch, "II", getX(), getY(), getWidth(), getHeight());
+		ShaperRendererUtils.DrawTopFontButton(batch, "II", getX(), getY(), getWidth(), getHeight());
 	}
 }

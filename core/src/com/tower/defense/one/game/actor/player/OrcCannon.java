@@ -1,88 +1,38 @@
 package com.tower.defense.one.game.actor.player;
 
-import static com.tower.defense.one.game.Assets.shapeRenderer;
-
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.one.game.Const;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 import com.tower.defense.one.game.actor.enemy.Enemy;
 import com.tower.defense.one.game.map.Point;
 import com.tower.defense.one.game.map.Route;
 
-public class OrcCannon extends Tower {
-	
-	public static final int Level1 = 1;
-	public static final int Level2 = 2;
-	public static final int Level3 = 3;
-	
-	static int COST = 110;
+public class OrcCannon implements TowerType {
 	
 	protected Circle cannonBall;
 	private Route cannonBallRoute;
 	private int step;
 	
-	public OrcCannon(float x, float y) {
-		super(x, y);
-		ATK = 100;
-		ATKSpeed = 13f;
-		ATKColor = null;
-		towerColor.set(Const.CannonColor);
+	public OrcCannon() {
 		cannonBall = new Circle(-50, - 50, 20);
-		updateATKBound(getATKWidth(Level1), getATKHeight(Level1));
-	}
-	
-	public static float getATKWidth(int level){
-		switch(level){
-		case Level1 :
-			return 300;
-		case Level2 :
-			return 350;
-		case Level3 :
-			return 450;
-			default :
-				return 0;
-		}
-	}
-	
-	public static float getATKHeight(int level){
-		switch(level){
-		case Level1 :
-			return 200;
-		case Level2 :
-			return 250;
-		case Level3 :
-			return 300;
-			default :
-				return 0;
-		}
 	}
 
 	@Override
-	void showOrHideOption() {
-		Gdx.app.debug("OrcCannon", "showOrHideTowerType");
-		showAction = !showAction;
-		if(showAction) {
-			ATKBoundColor = Const.CannonColor;
-		} else {
-			ATKBoundColor = null;
-		}
-	}
-
-	@Override
-	protected void towerAct(float delta) {
-		if (canATK()) {
+	public void towerAct(Tower tower, float delta) {
+		if (tower.canATK()) {
 			for (int i = 0; i < BGPanel.enemyIndex; i++) {
-				Enemy enemy = getParent().findActor(Const.ENEMY_ACTOR + i);
-				if (enemy != null && findEnemy(enemy)) {
+				Enemy enemy = tower.getParent().findActor(Const.ENEMY_ACTOR + i);
+				if (enemy != null && tower.findEnemy(enemy)) {
 					cannonBallRoute = new Route();
-					cannonBallRoute.generateByCorner(new float[][]{{offsetX, offsetY}, {enemy.getOffsetX(), enemy.getOffsetY()}}, 2.0f);
+					cannonBallRoute.generateByCorner(new float[][]{{tower.offsetX, tower.offsetY}, {enemy.getOffsetX(), enemy.getOffsetY()}}, 2.0f);
 					step = 0;
-					lastATKTime = TimeUtils.nanoTime();
+					tower.lastATKTime = TimeUtils.nanoTime();
 					break;
 				}
 			}
@@ -95,7 +45,7 @@ public class OrcCannon extends Tower {
 			if (cannonBallRoute.isLastStep(step)) {
 				cannonBallRoute = null;
 				for (int i = 0; i < BGPanel.enemyIndex; i++) {
-					Enemy enemy = getParent().findActor(
+					Enemy enemy = tower.getParent().findActor(
 							Const.ENEMY_ACTOR + i);
 					if (enemy != null
 							&& ((cannonBall.contains(enemy.getX(),
@@ -112,11 +62,11 @@ public class OrcCannon extends Tower {
 														+ enemy.getWidth(),
 												enemy.getY()
 														+ enemy.getHeight())))) {
-						enemyPoints.add(new Point(enemy.getX()
+						tower.enemyPoints.add(new Point(enemy.getX()
 								+ enemy.getWidth() / 2, enemy.getY()
 								+ enemy.getHeight() / 2));
-						enemy.hited(ATK);
-						ATKCount++;
+						enemy.hited(tower.ATK);
+						tower.ATKCount++;
 					}
 				}
 				cannonBall.setPosition(-50, -50);
@@ -126,14 +76,81 @@ public class OrcCannon extends Tower {
 	}
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
-		super.draw(batch, parentAlpha);
+	public void towerDraw(Batch batch, float parentAlpha) {
 		batch.end();
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(towerColor.r, towerColor.g, towerColor.b, towerColor.a);
-		shapeRenderer.circle(cannonBall.x, cannonBall.y, cannonBall.radius);
-		shapeRenderer.end();
+		ShaperRendererUtils.DrawCircle(cannonBall, getTowerColor(), ShapeType.Line);
 		batch.begin();
+	}
+
+	@Override
+	public float getATKWidth(int level) {
+		switch(level){
+		case 1 :
+			return 300;
+		case 2 :
+			return 350;
+		case 3 :
+			return 450;
+			default :
+				return 0;
+		}
+	}
+
+	@Override
+	public float getATKHeight(int level) {
+		switch(level){
+		case 1 :
+			return 200;
+		case 2 :
+			return 250;
+		case 3 :
+			return 300;
+			default :
+				return 0;
+		}
+	}
+
+	@Override
+	public int getIntBuy(int level) {
+		switch(level){
+		case 1 :
+			return 110;
+		case 2 :
+			return 260;
+		case 3 :
+			return 360;
+			default :
+				return 0;
+		}
+	}
+	
+	@Override
+	public int getIntSale(int level) {
+		return 10;
+	}
+
+	@Override
+	public int getATK(int level) {
+		switch(level){
+		case 1 :
+			return 110;
+		case 2 :
+			return 150;
+		case 3 :
+			return 200;
+			default :
+				return 0;
+		}
+	}
+
+	@Override
+	public float getATKSpeed() {
+		return 13f;
+	}
+
+	@Override
+	public Color getTowerColor() {
+		return Const.CannonColor;
 	}
 
 }

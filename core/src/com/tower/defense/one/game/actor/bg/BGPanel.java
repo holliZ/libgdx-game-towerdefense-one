@@ -1,7 +1,6 @@
 package com.tower.defense.one.game.actor.bg;
 
 import static com.tower.defense.one.game.Assets.font;
-import static com.tower.defense.one.game.Assets.shapeRenderer;
 import static com.tower.defense.one.game.Const.HEIGHT;
 import static com.tower.defense.one.game.Const.SplitLinesColor;
 import static com.tower.defense.one.game.Const.WIDTH;
@@ -9,6 +8,7 @@ import static com.tower.defense.one.game.Const.WIDTH;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.button.PauseButton;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 import com.tower.defense.one.game.screen.GameScreen;
@@ -47,12 +47,7 @@ public class BGPanel extends Table{
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		batch.end();
-		shapeRenderer.begin(ShapeType.Filled);
-		
-		shapeRenderer.setColor(SplitLinesColor);
-		shapeRenderer.rect(0, HEIGHT - 45, WIDTH, 3);
-		
-		shapeRenderer.end();
+		ShaperRendererUtils.DrawRectangle(0, HEIGHT - 45, WIDTH, 3, SplitLinesColor, ShapeType.Filled);
 		batch.begin();
 		
 		font.draw(batch, "Blood:" + BloodCur, 10, HEIGHT - 10);

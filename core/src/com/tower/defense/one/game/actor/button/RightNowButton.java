@@ -3,7 +3,7 @@ package com.tower.defense.one.game.actor.button;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.tower.defense.one.game.Utils;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.BasicActor;
 import com.tower.defense.one.game.actor.enemy.Wave;
 
@@ -23,7 +23,7 @@ public class RightNowButton extends BasicActor {
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 		batch.end();
-		Utils.DrawRightNowButton(rightNowCircle.x, rightNowCircle.y, rightNowCircle.radius, 360 * (wave.getLeftTime() + 1)/Wave.beCloseTime);
+		ShaperRendererUtils.DrawRightNowButton(rightNowCircle.x, rightNowCircle.y, rightNowCircle.radius, 360 * (wave.getLeftTime() + 1)/Wave.beCloseTime);
 		batch.begin();
 	}
 	

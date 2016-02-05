@@ -1,12 +1,13 @@
 package com.tower.defense.one.game.chapters;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.tower.defense.one.game.Assets;
 import com.tower.defense.one.game.Const;
-import com.tower.defense.one.game.Utils;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.bg.BGPanel;
 import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 import com.tower.defense.one.game.actor.enemy.Enemy;
@@ -111,7 +112,8 @@ public class ChapterOne extends Table {
 //		batch.draw(Assets.chapterOne, 0, 0);
 //		Utils.DrawRouteInLineByCorners(batch, corners);
 		batch.end();
-		Utils.DrawRouteInFilledByCorners(corners);
+		ShaperRendererUtils.DrawRectangle(getX(), getY(), getWidth(), getHeight(), Const.BGColor, ShapeType.Filled);
+		ShaperRendererUtils.DrawRouteByCorners(corners, ShapeType.Filled);
 		batch.begin();
 		super.draw(batch, parentAlpha);
 		Assets.font.draw(batch, "Time:" + (int)(accumulator), 0, 0 + 30);

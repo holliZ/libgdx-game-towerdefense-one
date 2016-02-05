@@ -3,7 +3,8 @@ package com.tower.defense.one.game.actor.button;
 import static com.tower.defense.one.game.Const.*;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.tower.defense.one.game.Utils;
+import com.tower.defense.one.game.Const;
+import com.tower.defense.one.game.ShaperRendererUtils;
 import com.tower.defense.one.game.actor.BasicActor;
 
 public class NextButton extends BasicActor {
@@ -16,7 +17,7 @@ public class NextButton extends BasicActor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		Utils.DrawButtonByFont(batch, "Next", getX(), getY(), getWidth(), getHeight());
+		ShaperRendererUtils.DrawFontButton(batch, "Next", getX(), getY(), getWidth(), getHeight(), Const.ButtonInnerAColor);
 	}
 	
 	@Override

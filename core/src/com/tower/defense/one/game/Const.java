@@ -31,18 +31,28 @@ public class Const {
 	
 	public static final int TOWERTYPE_BUTTON_RADIUS = 28;
 	
+	public static final Color BGColor = new Color(158/255f, 172/255f, 66/255f, 1);
+	
 	public static final Color SplitLinesColor = new Color(72 / 255f, 22 / 255f, 15 / 255f, 1f);
 	public static final Color CoverColor = new Color(141/255f, 141/255f, 141/255f, 120/255f);
 	public static final Color SummaryColor = new Color(191/255f, 191/255f, 191/255f, 1f);
 	public static final Color CheckedLineColor = Color.BLACK;
 	
-	public static final Color RouteColor = new Color(251/255f, 195/255f, 136/255f, 1);
-	public static final Color ButtonBGColor = new Color(239/255f, 172/255f, 52/255f, 1);
-	public static final Color ButtonAvailableColor = new Color(187/255f,209/255f,35/255f,1f);
-
-	public static final Color LockedTowerColor = new Color(112/255f, 112/255f, 112/255f, 0.8f);
-	public static final Color DefaultTowerColor = new Color(219/255f, 163/255f, 27/255f, 1f);
+	public static final Color RouteColor = new Color(250/255f, 189/255f, 132/255f, 1);
+	
+	public static final Color TopButtonBGColor = new Color(240/255f, 175/255f, 54/255f, 1);
+	public static final Color ButtonOuterColor = new Color(76/255f, 60/255f, 48/255f, 1);
+	public static final Color ButtonInnerADColor = new Color(134/255f,114/255f,84/255f,1f);//有效但不推荐的按钮的颜色,ButtonInnerAvailableDeprecatedColor
+	public static final Color ButtonInnerAColor = new Color(170/255f,186/255f,53/255f,1f);
+	public static final Color ButtonInnerASColor = new Color(230/255f,85/255f,20/255f,1f);
+	public static final Color ButtonUnAvailableColor = new Color(112/255f, 112/255f, 112/255f, 0.8f);
+	
+	public static final Color ATKColor = new Color(230/255f, 84/255f, 20/255f, 0.1f);
+	public static final Color DefaultTowerColor = new Color(243/255f, 204/255f, 102/255f, 1f);
 	public static final Color CannonColor = new Color(183/255f, 32/255f, 238/255f, 1f);
 	
+	public static final Color RightNowOuterColor = new Color(100/255f, 79/255f, 60/255f, 1f);
+	public static final Color RightNowMiddleColor = new Color(255/255f, 239/255f, 215/255f, 1f);
+	public static final Color RightNowInnerColor = new Color(59/255f, 46/255f, 39/255f, 1f);
 	
 }
