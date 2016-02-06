@@ -15,18 +15,10 @@ import com.tower.defense.one.game.actor.button.PlaySpeedButton;
 import com.tower.defense.one.game.map.Point;
 import com.tower.defense.one.game.map.Route;
 
-public class Enemy extends BasicActor {
+public abstract class Enemy extends BasicActor {
 
-	int HP = 100;
-	int HPMax = 100;
-	int ATK = 20;
-	int ARMOR = 0;// 物理防御力
-	int MAGICDEFENSE = 0; // 魔法防御力
-	int REWARD = 1;
-	int HURT = 1;
-	float MoveSpeed = 0.05f;// 移动速度, 数值越大越慢
-	
 	float offsetX, offsetY;
+	float HPCur;
 
 	private int step = 0;
 	private Route route;
@@ -39,18 +31,20 @@ public class Enemy extends BasicActor {
 		this.route = route;
 		this.animation = animation;
 		stateTime = 0f;
+		HPCur = getHP();
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		Assets.font2.draw(batch, getName().substring(10), getX(), getY() + getHeight() + 20);
+//		Assets.font2.draw(batch, getName().substring(10), getX(), getY() + getHeight() + 20);
+		Assets.font2.draw(batch, HPCur + " ", getX(), getY() + getHeight() + 20);
 		batch.draw(animation.getKeyFrame(stateTime, true), getX(), getY());
 
-		if (HP != HPMax) {
+		if (HPCur != getHP()) {
 			batch.end();
 			ShaperRendererUtils.DrawRectangle(getX(), getY() - 3, getWidth(), 3, Color.RED, ShapeType.Line);
-			ShaperRendererUtils.DrawRectangle(getX(), getY() - 3, getWidth() * ((float)HP / HPMax), 3, Color.RED, ShapeType.Line);
+			ShaperRendererUtils.DrawRectangle(getX(), getY() - 3, getWidth() * ((float)HPCur / getHP()), 3, Color.RED, ShapeType.Line);
 			batch.begin();
 		}
 
@@ -62,13 +56,13 @@ public class Enemy extends BasicActor {
 
 		stateTime += delta * PlaySpeedButton.getSpeed();
 
-		if (HP > 0) {
+		if (HPCur > 0) {
 			if (canMove()) {
 				nextStep();
 				lastMoveTime = TimeUtils.nanoTime();
 			}
 		} else {
-			BGPanel.addTreasure(REWARD);
+			BGPanel.addTreasure(getReward());
 			Gdx.app.debug("Enemy", "killed");
 			BGPanel.enemyNum--;
 			BGPanel.killedEnemyNum++;
@@ -85,16 +79,17 @@ public class Enemy extends BasicActor {
 		step++;
 
 		if (route.isLastStep(step)) {
-			BGPanel.hurtBlood(HURT);
+			BGPanel.hurtBlood(getHurt());
 			Gdx.app.debug("Enemy", "Eat");
 			BGPanel.enemyNum--;
 			remove();
 		}
 	}
 
-	public boolean hited(float ATK) {
-		HP -= ATK;
-		return HP > 0;
+	public boolean hited(float ATK, float magicAttack) {
+		HPCur -= ATK * getDenence();
+		HPCur -= magicAttack * getMagicDenence();
+		return HPCur > 0;
 	}
 
 	public Point getNextStep() {
@@ -102,7 +97,7 @@ public class Enemy extends BasicActor {
 	}
 
 	private boolean canMove() {
-		return TimeUtils.nanoTime() - lastMoveTime > Const.ONE_SECOND / PlaySpeedButton.getSpeed() * MoveSpeed;
+		return TimeUtils.nanoTime() - lastMoveTime > Const.ONE_SECOND / PlaySpeedButton.getSpeed() * getMoveSpeed();
 	}
 
 	public float getOffsetX() {
@@ -113,4 +108,12 @@ public class Enemy extends BasicActor {
 		return offsetY;
 	}
 	
+	public abstract float getATK();
+	public abstract float getMagicAttack();
+	public abstract float getDenence();
+	public abstract float getMagicDenence();
+	public abstract int getHP();
+	public abstract int getReward();
+	public abstract int getHurt();
+	public abstract float getMoveSpeed();
 }

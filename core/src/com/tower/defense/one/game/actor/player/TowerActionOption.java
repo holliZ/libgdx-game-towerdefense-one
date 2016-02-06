@@ -1,6 +1,7 @@
 package com.tower.defense.one.game.actor.player;
 
 import static com.tower.defense.one.game.Assets.chinese;
+import static com.tower.defense.one.game.Assets.font2;
 import static com.tower.defense.one.game.Const.TOWERTYPE_BUTTON_RADIUS;
 
 import com.badlogic.gdx.Gdx;
@@ -66,8 +67,8 @@ public class TowerActionOption extends BasicActor {
 
 		batch.end();
 		
-		ShaperRendererUtils.DrawCircle(optionCircle.x, optionCircle.y, optionCircle.radius + 4, Const.ButtonOuterColor, ShapeType.Filled);
-		ShaperRendererUtils.DrawCircle(optionCircle, (intBuy <= BGPanel.TreasureCur || intSale > 0)?optionColor: Const.ButtonUnAvailableColor, ShapeType.Filled);
+		ShaperRendererUtils.DrawCircle(optionCircle, Const.ButtonOuterColor, ShapeType.Filled);
+		ShaperRendererUtils.DrawCircle(optionCircle.x, optionCircle.y, optionCircle.radius - 4, (intBuy <= BGPanel.TreasureCur || intSale > 0)?optionColor: Const.ButtonUnAvailableColor, ShapeType.Filled);
 		
 //		batch.draw(region, getX(), getY(), getWidth(), getHeight());
 //		shapeRenderer.setColor(towerColor);
@@ -80,6 +81,10 @@ public class TowerActionOption extends BasicActor {
 		} else {
 			chinese.draw(batch, chineseStr, getX() - optionCircle.radius, getY() + chinese.getCapHeight()/2, optionCircle.radius * 2, Align.center, false);
 		}
+		
+		if(intBuy > 0) {
+			font2.draw(batch, intBuy +"", getX() - optionCircle.radius, getY() + chinese.getCapHeight() + 5, optionCircle.radius * 2, Align.center, false);
+		}
 	}
 	
 	public void onClick() {
@@ -88,10 +93,10 @@ public class TowerActionOption extends BasicActor {
 			if (tower != null) {
 				switch (type) {
 				case SELL:
-					tower.tempATKBoundSize(-1, -1);
+					tower.tempAttackBoundSize(0, 0);
 					break;
 				case UPGRADE:
-					tower.tempATKBoundSize(towerType.getATKWidth(tower.Level + 1), towerType.getATKHeight(tower.Level + 1));
+					tower.tempAttackBoundSize(towerType.getAttackWidth(tower.Level + 1), towerType.getAttackHeight(tower.Level + 1));
 					break;
 				}
 			}

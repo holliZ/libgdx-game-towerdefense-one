@@ -47,9 +47,13 @@ public class Const {
 	public static final Color ButtonInnerASColor = new Color(230/255f,85/255f,20/255f,1f);
 	public static final Color ButtonUnAvailableColor = new Color(112/255f, 112/255f, 112/255f, 0.8f);
 	
-	public static final Color ATKColor = new Color(230/255f, 84/255f, 20/255f, 0.1f);
+	public static final Color AttackColor = new Color(230/255f, 84/255f, 20/255f, 0.2f);
 	public static final Color DefaultTowerColor = new Color(243/255f, 204/255f, 102/255f, 1f);
 	public static final Color CannonColor = new Color(183/255f, 32/255f, 238/255f, 1f);
+	public static final Color CryptColor = new Color(230/255f, 59/255f, 78/255f, 1f);
+	public static final Color CrossbowColor = new Color(138/255f, 88/255f, 244/255f, 1f);
+	public static final Color ApprenticeColor = new Color(78/255f, 245/255f, 115/255f, 1f);
+	public static final Color PoisonColor = new Color(238/255f, 96/255f, 188/255f, 1f);
 	
 	public static final Color RightNowOuterColor = new Color(100/255f, 79/255f, 60/255f, 1f);
 	public static final Color RightNowMiddleColor = new Color(255/255f, 239/255f, 215/255f, 1f);

@@ -37,7 +37,8 @@ public class BGPanel extends Table{
 		enemyIndex = 0;
 		enemyNum = 0;
 		killedEnemyNum = 0;
-		TreasureCur = 160;
+//		TreasureCur = 160;
+		TreasureCur = 1000;
 		Star = 3;
 		ChapterReward = 0;
 		setVisible(true);

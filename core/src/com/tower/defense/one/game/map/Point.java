@@ -22,16 +22,6 @@ public class Point {
 		this.y = y;
 	}
 	
-	public boolean isEqual(Point a){
-		if(a.x == this.x && a.y == this.y) return true;
-		return false;
-	}
-	
-	public boolean isAdjacent(Point a){
-		if(a.x == this.x || a.y == this.y) return true;
-		return false;
-	}
-	
 	public String toString(){
 		return "{" + x + "," + y + "}";
 	}

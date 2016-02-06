@@ -23,6 +23,13 @@ public class ShaperRendererUtils {
 		alpha = true;
 	}
 	
+	public static void DrawLine(float x1, float y1, float x2, float y2,  Color color, ShapeType type){
+		shapeRenderer.begin(type);
+		shapeRenderer.setColor(color);
+		shapeRenderer.line(x1, y1, x2, y2);
+		shapeRenderer.end();
+	}
+	
 	public static void DrawRectangle(float x, float y, float width, float height, Color color, ShapeType type){
 		if(alpha) {
 			Gdx.gl.glEnable(GL20.GL_BLEND);

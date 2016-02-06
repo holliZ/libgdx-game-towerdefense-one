@@ -1,6 +1,7 @@
 package com.tower.defense.one.game.actor.player;
 
 import static com.tower.defense.one.game.Assets.chinese;
+import static com.tower.defense.one.game.Assets.font2;
 import static com.tower.defense.one.game.Const.TOWERTYPE_BUTTON_RADIUS;
 
 import com.badlogic.gdx.Gdx;
@@ -25,11 +26,12 @@ public class TowerTypeOption extends BasicActor {
 	public static final int POISON = 5;
 
 	// private TextureRegion region;
-	private int intBuy = 9999;
+	private int IntBuyLocked = 10000;
+	private int intBuy = IntBuyLocked;
 	
 	private int type = 1;
 	
-	private Ellipse tempATKEllipse;
+	private Ellipse tempAttackEllipse;
 	private Color towerColor;
 	private String chineseStr;
 	private Circle optionCircle;
@@ -44,7 +46,7 @@ public class TowerTypeOption extends BasicActor {
 		super(x, y, 0, 0);
 		this.tower = tower;
 		optionCircle = new Circle(getX(), getY(), TOWERTYPE_BUTTON_RADIUS);
-		tempATKEllipse = new Ellipse(0, 0, 0, 0);
+		tempAttackEllipse = new Ellipse(0, 0, 0, 0);
 		towerColor = Const.ButtonUnAvailableColor;
 		
 		this.type = type;
@@ -53,24 +55,24 @@ public class TowerTypeOption extends BasicActor {
 		} else {
 			switch (type) {
 			case CANNON:
-				chineseStr = "炮";
-				towerType = new OrcCannon();
-				intBuy = towerType.getIntBuy(tower.Level + 1);
-				towerColor = Const.CannonColor;
+				towerType = new TowerCannon();
 				break;
 			case CRYPT:
-				chineseStr = "兵";
+				towerType = new TowerCrypt();
 				break;
 			case CROSSBOW:
-				chineseStr = "箭";
+				towerType = new TowerCrossbow();
 				break;
 			case APPRENTICE:
-				chineseStr = "法";
+				towerType = new TowerApprentice();
 				break;
 			case POISON:
-				chineseStr = "毒";
+				towerType = new TowerPoison();
 				break;
 			}
+			intBuy = towerType.getIntBuy(tower.Level + 1);
+			towerColor = towerType.getTowerColor();
+			chineseStr = towerType.getTowerTypeName();
 		}
 		// if (locked) {
 		// region = lockingIcon;
@@ -78,7 +80,7 @@ public class TowerTypeOption extends BasicActor {
 		// switch (type) {
 		// case CANNON:
 		// region = cannonIcon;
-		// intBuy = OrcCannon.intBuy;
+		// intBuy = Cannon.intBuy;
 		// break;
 		// case CRYPT:
 		// region = cryptIcon;
@@ -106,15 +108,19 @@ public class TowerTypeOption extends BasicActor {
 		batch.end();
 		
 //		batch.draw(region, getX(), getY(), getWidth(), getHeight());
-		ShaperRendererUtils.DrawCircle(optionCircle.x, optionCircle.y, optionCircle.radius + 4, Const.ButtonOuterColor, ShapeType.Filled);
+//		ShaperRendererUtils.DrawCircle(optionCircle.x, optionCircle.y, optionCircle.radius + 4, Const.ButtonOuterColor, ShapeType.Filled);
 		ShaperRendererUtils.DrawCircle(optionCircle, towerColor, ShapeType.Filled);
-		ShaperRendererUtils.DrawCircle(optionCircle.x, optionCircle.y, optionCircle.radius - 2, intBuy <= BGPanel.TreasureCur ? Const.ButtonInnerAColor : Const.ButtonUnAvailableColor, ShapeType.Filled);
+		ShaperRendererUtils.DrawCircle(optionCircle.x, optionCircle.y, optionCircle.radius - 4, intBuy <= BGPanel.TreasureCur ? Const.ButtonInnerAColor : Const.ButtonUnAvailableColor, ShapeType.Filled);
 		
 		batch.begin();
-		if (lastTouchActorName == getName()) {
+		if (lastTouchActorName == getName() && intBuy < IntBuyLocked) {
 			chinese.draw(batch, "√", getX() - optionCircle.radius, getY() + chinese.getCapHeight()/2, optionCircle.radius * 2, Align.center, false);
 		} else {
 			chinese.draw(batch, chineseStr, getX() - optionCircle.radius, getY() + chinese.getCapHeight()/2, optionCircle.radius * 2, Align.center, false);
+		}
+		
+		if(intBuy < IntBuyLocked) {
+			font2.draw(batch, intBuy +"", getX() - optionCircle.radius, getY() + chinese.getCapHeight() + 5, optionCircle.radius * 2, Align.center, false);
 		}
 	}
 
@@ -122,27 +128,15 @@ public class TowerTypeOption extends BasicActor {
 		Gdx.app.debug(getName(), type + " ");
 		if (lastTouchActorName != getName()) {
 			if(towerType != null) {
-				tower.tempATKBoundSize(towerType.getATKWidth(tower.Level + 1), towerType.getATKHeight(tower.Level + 1));
+				tower.tempAttackBoundSize(towerType.getAttackWidth(tower.Level + 1), towerType.getAttackHeight(tower.Level + 1));
 			} else {
-				tower.tempATKBoundSize(-1, -1);
+				tower.tempAttackBoundSize(0, 0);
 			}
-		} else if (intBuy <= BGPanel.TreasureCur) {
-			tempATKEllipse.set(0, 0, 0, 0);
+		} else if (intBuy <= BGPanel.TreasureCur && intBuy < IntBuyLocked) {
+			tempAttackEllipse.set(0, 0, 0, 0);
 			tower.hideWhenClickOthers();
-			switch (type) {
-			case CANNON:
-				BGPanel.addTreasure(-intBuy);
-				tower.setTowerType(towerType);
-				break;
-			case CRYPT:
-				return;
-			case CROSSBOW:
-				return;
-			case APPRENTICE:
-				return;
-			case POISON:
-				return;
-			}
+			BGPanel.addTreasure(-intBuy);
+			tower.setTowerType(towerType);
 		}
 	}
 	

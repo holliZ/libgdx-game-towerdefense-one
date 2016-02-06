@@ -60,7 +60,7 @@ public class ChapterOne extends Table {
 		waves = new Array<Wave>(waveMax);
 		for(int i=0;i<waveMax;i++){
 			Wave wave = new Wave(this, enemyRoute, 40 * i + Wave.beCloseTime);
-			wave.setPeasantNum(2 + i * 1);
+			wave.setPeasantNum(9 + i * 1);
 			waves.add(wave);
 			BGPanel.enemyNum += wave.countLeftEmeny();
 		}
